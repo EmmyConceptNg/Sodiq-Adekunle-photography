@@ -19,7 +19,7 @@ export default function Projects() {
           flexDirection: "column",
           justifyContent: "center",
           bgcolor: "#121214",
-          p: { md: "40px", xs: "20px" },
+          p: { md: "40px", xs: "0" },
           border: "1px solid rgba(0,0,0,.05)",
           borderRadius: "20px",
           boxShadow:
@@ -107,7 +107,7 @@ function ProjectTab() {
               color: "gray", // Unselected tab color
             },
             "& .Mui-selected": {
-              color: "#2ddb81", // Selected tab color
+              color: "#2ddb81 !important", // Selected tab color
             },
             "& .MuiTabs-indicator": {
               backgroundColor: "#2ddb81", // Indicator color
@@ -124,7 +124,7 @@ function ProjectTab() {
           {Array(10)
             .fill()
             .map((item, index) => (
-              <Grid size={{ xs: 12, md: 4 }} key="index">
+              <Grid size={{ xs: 12, md: 4, sm:6 }} key="index">
                 <Card
                   sx={{
                     borderBottomLeftRadius: "12px",

@@ -93,10 +93,12 @@ function About() {
             color="#fff"
             sx={{ my: 3 }}
           >
-            <TypewriterEffect
+            {/* <TypewriterEffect
               text="I am Emmanuel Kolawole, a product designer crafting user-centric design with pixel-perfect precision."
               speed={100}
-            />
+            /> */}
+            I am Emmanuel Kolawole, a product designer crafting user-centric
+            design with pixel-perfect precision.
           </Text>
 
           <Text fs="16px" fw="400" color="#2ddb81">

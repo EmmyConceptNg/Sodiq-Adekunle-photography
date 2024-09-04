@@ -32,9 +32,13 @@ export default function Footer({logo=true, }) {
            justifyContent={{ md: "flex-start", xs: "center" }}
          >
            {/* <Box component="img" src="/logo/Logo.svg" sx={{ height: "72px" }} /> */}
-           <Text color="#fff" fw="500">
-             {" "}
-             Photography
+           <Text
+             color="#fff"
+             fw="400"
+             fs={{ md: "24px", xs: "15px" }}
+             ff="Sacramento, cursive"
+           >
+             Sodiq Adekunle photography
            </Text>
          </Box>
        )}
