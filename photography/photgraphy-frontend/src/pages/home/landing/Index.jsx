@@ -7,6 +7,8 @@ import Footer from "../../../components/layouts/Footer";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
+import Projects from "./Projects";
+import Action from "./Action";
 
 export default function Home() {
   const location = useLocation();
@@ -30,6 +32,8 @@ export default function Home() {
         <Box width="100%" height="100vh" pt={2}>
           <Header />
           <Hero />
+          <Projects />
+          <Action />
           <Footer />
         </Box>
       </Box>

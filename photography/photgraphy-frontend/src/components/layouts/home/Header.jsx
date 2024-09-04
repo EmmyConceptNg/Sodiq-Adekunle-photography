@@ -41,7 +41,12 @@ export default function Header(props) {
               sx={{ height: "72px" }}
             /> */}
 
-          <Text color="#fff" fw="400" fs="24px" ff="Sacramento, cursive">
+          <Text
+            color="#fff"
+            fw="400"
+            fs={{ md: "24px", xs: "15px" }}
+            ff="Sacramento, cursive"
+          >
             Sodiq Adekunle photography
           </Text>
 
@@ -53,7 +58,9 @@ export default function Header(props) {
           >
             <NavBar />
           </Box>
-          <Action />
+          <Box display={{ md: 'block', xs : 'none' }}>
+            <Action />
+          </Box>
         </ToolbarStyled>
       </AppBarStyled>
     </>

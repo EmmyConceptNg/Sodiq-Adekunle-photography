@@ -7,6 +7,7 @@ import Image from "../../../components/Image";
 import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import TypewriterEffect from "../../../utils/Writer";
 
 const responsive = {
   superLargeDesktop: {
@@ -28,18 +29,16 @@ const responsive = {
   },
 };
 
-
 export default function Hero() {
   return (
     <Grid container spacing={5} sx={{ mx: { md: "200px", xs: "20px" }, mt: 5 }}>
-     <PersonalInfo />
+      <PersonalInfo />
       <About />
     </Grid>
   );
 }
 
-
-function PersonalInfo(){
+function PersonalInfo() {
   return (
     <Grid
       size={{ xs: 12, md: 4 }}
@@ -48,7 +47,7 @@ function PersonalInfo(){
         flexDirection: "column",
         justifyContent: "center",
         bgcolor: "#121214",
-        p: "40px",
+        p: { md: "40px", xs: "20px" },
         border: "1px solid rgba(0,0,0,.05)",
         borderRadius: "20px",
         boxShadow:
@@ -68,16 +67,15 @@ function PersonalInfo(){
   );
 }
 
-
-function About (){
-  const navigate = useNavigate()
+function About() {
+  const navigate = useNavigate();
   return (
     <Grid size={{ xs: 12, md: 8 }}>
       <Stack spacing={5}>
         <Box
           bgcolor="#121214"
           sx={{
-            p: "40px",
+            p: { md: "40px", xs: "20px" },
             border: "1px solid rgba(0,0,0,.05)",
             borderRadius: "20px",
             boxShadow:
@@ -89,14 +87,16 @@ function About (){
           </Text>
 
           <Text
-            fs="32px"
+            fs={{ md: "32px", xs: "24px" }}
             fw="900"
             ff="Helvetica Neue"
             color="#fff"
             sx={{ my: 3 }}
           >
-            I’m Emmanuel Kolawole, a product designer crafting user-centric
-            design with pixel-perfect precision.
+            <TypewriterEffect
+              text="I am Emmanuel Kolawole, a product designer crafting user-centric design with pixel-perfect precision."
+              speed={100}
+            />
           </Text>
 
           <Text fs="16px" fw="400" color="#2ddb81">
@@ -117,7 +117,7 @@ function About (){
         <Box
           bgcolor="#121214"
           sx={{
-            p: "40px",
+            p: { md: "40px", xs: "20px" },
             border: "1px solid rgba(0,0,0,.05)",
             borderRadius: "20px",
             boxShadow:
@@ -152,7 +152,7 @@ function About (){
   );
 }
 
-function Socials (){
+function Socials() {
   return (
     <Stack
       mt={3}
