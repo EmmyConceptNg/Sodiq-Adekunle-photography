@@ -1,0 +1,107 @@
+
+:root {
+  line-height: 1.5;
+  font-family: "Helvetica Neue", sans-serif;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#root {
+  min-width: 100%;
+}
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 100vw;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background-color: #000;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.custom-button-contained {
+  background: linear-gradient(94.78deg, #2ddb81 0%, #2ddb81 100%);
+  padding: 14 38 10 39;
+  border-radius: 6px;
+  color: currentColor;
+}
+.custom-button-contained:hover {
+  background: linear-gradient(94.78deg, #2ddb81 0%, #2ddb81 100%);
+  padding: 14 38 10 39;
+  border-radius: 6px;
+  color: currentColor;
+}
+button p {
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.custom-button-outlined {
+  padding: 14 38 10 39;
+  border-radius: 6px;
+  border: 1px solid currentColor !important;
+}
+.custom-button-outlined:hover {
+  padding: 14 38 10 39;
+  border-radius: 6px;
+  border: 1px solid #333333;
+}
+
+.custom-button-outlined p {
+  color: currentColor;
+}
+.custom-button-text p {
+  color: currentColor;
+}
+
+.custom-button-text {
+  padding: 14 38 10 39;
+  border-radius: 6px;
+}
+.custom-button-text:hover {
+  padding: 14 38 10 39;
+  border-radius: 6px;
+}
+
+p {
+  font-family: "poppins", sans-serif;
+}
+
+.myScrollBox::-webkit-scrollbar-track {
+  background: #f1f1f1; /* color of the tracking area */
+}
+
+.myScrollBox::-webkit-scrollbar-thumb {
+  background-color: #888; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 3px solid #f1f1f1; /* creates padding around scroll thumb */
+}
+
+/* Style applied when the scroll thumb is being hovered or clicked */
+.myScrollBox::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.myScrollBox {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #ff9d43 #f1f1f1; /* thumb and track color */
+}
