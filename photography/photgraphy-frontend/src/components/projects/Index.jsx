@@ -6,16 +6,20 @@ import {
   CardMedia,
   Tab,
   Tabs,
+  IconButton,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import Text from "../../../components/Text";
+
 import { useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import PropTypes from "prop-types";
+import { OpenInNew } from "@mui/icons-material";
+import Text from "../Text";
+
 
 export default function Projects() {
-  const controls = useAnimation();  
+  const controls = useAnimation();
   const [ref, inView] = useInView();
 
   if (inView) {
@@ -150,15 +154,54 @@ function ProjectTab() {
                     borderBottomRightRadius: "12px",
                     border: "1px solid gray",
                     bgcolor: "transparent",
+                    position: "relative", // Added for hover effect
                   }}
                 >
                   <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="200"
-                      image="https://blog.snappymob.com/wp-content/uploads/2020/12/8-Tips-for-Designing-Empty-Placeholder-Pages-Leni-Featured.png"
-                      alt="weddigng"
-                    />
+                    <Box
+                      sx={{
+                        position: "relative",
+                        "&:hover .hoverIcon": {
+                          opacity: 1,
+                        },
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
+                        height="200"
+                        image="/svgs/banner.png"
+                        alt="wedding"
+                        sx={{
+                          transition: "0.3s",
+                          "&:hover": {
+                            filter: "brightness(70%)", // Darken the image on hover
+                          },
+                        }}
+                      />
+                      <Box
+                        className="hoverIcon"
+                        sx={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          opacity: 0,
+                          transition: "0.3s",
+                        }}
+                      >
+                        <IconButton
+                          href="/works/:id" // Link to your single page
+                          sx={{
+                            bgcolor: "rgba(0,0,0,0.5)",
+                            "&:hover": {
+                              bgcolor: "rgba(0,0,0,0.8)",
+                            },
+                          }}
+                        >
+                          <OpenInNew sx={{ color: "#fff" }} />
+                        </IconButton>
+                      </Box>
+                    </Box>
                     <CardContent>
                       <Text fs="24px" fw="600">
                         Wedding
@@ -186,15 +229,54 @@ function ProjectTab() {
                     borderBottomRightRadius: "12px",
                     border: "1px solid gray",
                     bgcolor: "transparent",
+                    position: "relative", // Added for hover effect
                   }}
                 >
                   <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="200"
-                      image="https://blog.snappymob.com/wp-content/uploads/2020/12/8-Tips-for-Designing-Empty-Placeholder-Pages-Leni-Featured.png"
-                      alt="weddigng"
-                    />
+                    <Box
+                      sx={{
+                        position: "relative",
+                        "&:hover .hoverIcon": {
+                          opacity: 1,
+                        },
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
+                        height="200"
+                        image="/svgs/banner.png"
+                        alt="wedding"
+                        sx={{
+                          transition: "0.3s",
+                          "&:hover": {
+                            filter: "brightness(70%)", // Darken the image on hover
+                          },
+                        }}
+                      />
+                      <Box
+                        className="hoverIcon"
+                        sx={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          opacity: 0,
+                          transition: "0.3s",
+                        }}
+                      >
+                        <IconButton
+                          href="/works/:id" // Link to your single page
+                          sx={{
+                            bgcolor: "rgba(0,0,0,0.5)",
+                            "&:hover": {
+                              bgcolor: "rgba(0,0,0,0.8)",
+                            },
+                          }}
+                        >
+                          <OpenInNew sx={{ color: "#fff" }} />
+                        </IconButton>
+                      </Box>
+                    </Box>
                     <CardContent>
                       <Text fs="24px" fw="600">
                         Wedding
@@ -222,15 +304,54 @@ function ProjectTab() {
                     borderBottomRightRadius: "12px",
                     border: "1px solid gray",
                     bgcolor: "transparent",
+                    position: "relative", // Added for hover effect
                   }}
                 >
                   <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="200"
-                      image="https://blog.snappymob.com/wp-content/uploads/2020/12/8-Tips-for-Designing-Empty-Placeholder-Pages-Leni-Featured.png"
-                      alt="weddigng"
-                    />
+                    <Box
+                      sx={{
+                        position: "relative",
+                        "&:hover .hoverIcon": {
+                          opacity: 1,
+                        },
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
+                        height="200"
+                        image="/svgs/banner.png"
+                        alt="wedding"
+                        sx={{
+                          transition: "0.3s",
+                          "&:hover": {
+                            filter: "brightness(70%)", // Darken the image on hover
+                          },
+                        }}
+                      />
+                      <Box
+                        className="hoverIcon"
+                        sx={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          opacity: 0,
+                          transition: "0.3s",
+                        }}
+                      >
+                        <IconButton
+                          href="/works/:id" // Link to your single page
+                          sx={{
+                            bgcolor: "rgba(0,0,0,0.5)",
+                            "&:hover": {
+                              bgcolor: "rgba(0,0,0,0.8)",
+                            },
+                          }}
+                        >
+                          <OpenInNew sx={{ color: "#fff" }} />
+                        </IconButton>
+                      </Box>
+                    </Box>
                     <CardContent>
                       <Text fs="24px" fw="600">
                         Wedding

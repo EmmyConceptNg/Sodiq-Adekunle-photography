@@ -92,20 +92,22 @@ function Address() {
           mb={3}
         >
           <Box>
-            <Box display="flex" justifyContent="flex-start">{icon}</Box>
-            <Text
-              sx={{ textAlign: "left", my: 0 }}
-              fs="18px"
-              fw="600"
-              color="#fff"
-            >
-              {name}
-            </Text>
+            <Box display="flex" justifyContent="flex-start">
+              {icon}
+            </Box>
             <Text
               sx={{ textAlign: "left", my: 0 }}
               fs="14px"
               fw="500"
               color="gray"
+            >
+              {name}
+            </Text>
+            <Text
+              sx={{ textAlign: "left", my: 0 }}
+              fs="18px"
+              fw="600"
+              color="#fff"
             >
               {detail}
             </Text>

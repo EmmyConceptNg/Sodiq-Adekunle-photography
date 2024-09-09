@@ -6,8 +6,8 @@ import Footer from "../../../components/layouts/Footer";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
-import Projects from "./Projects";
 import Action from "../../../components/Action";
+import Projects from "../../../components/projects/Index";
 
 
 export default function Works() {
