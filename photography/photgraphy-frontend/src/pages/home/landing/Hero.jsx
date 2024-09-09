@@ -7,7 +7,8 @@ import Image from "../../../components/Image";
 import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import TypewriterEffect from "../../../utils/Writer";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const responsive = {
   superLargeDesktop: {
@@ -30,8 +31,24 @@ const responsive = {
 };
 
 export default function Hero() {
+  const controls = useAnimation();
+  const [ref, inView] = useInView();
+
+  if (inView) {
+    controls.start({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    });
+  }
+
   return (
-    <Grid container spacing={5} sx={{ mx: { md: "200px", xs: "20px" }, mt: 5 }}>
+    <Grid
+      container
+      spacing={5}
+      sx={{ mx: { md: "200px", xs: "15px" }, mt: 5 }}
+      ref={ref}
+    >
       <PersonalInfo />
       <About />
     </Grid>
@@ -39,6 +56,17 @@ export default function Hero() {
 }
 
 function PersonalInfo() {
+  const controls = useAnimation();
+  const [ref, inView] = useInView();
+
+  if (inView) {
+    controls.start({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    });
+  }
+
   return (
     <Grid
       size={{ xs: 12, md: 4 }}
@@ -54,6 +82,10 @@ function PersonalInfo() {
           "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
         textAlign: "center",
       }}
+      component={motion.div}
+      initial={{ opacity: 0, y: 50 }}
+      animate={controls}
+      ref={ref}
     >
       <Image src="/images/profile.png" alt="profile" />
       <Text fs="32px" fw="900" ff="Helvetica Neue" color="#fff">
@@ -69,8 +101,25 @@ function PersonalInfo() {
 
 function About() {
   const navigate = useNavigate();
+  const controls = useAnimation();
+  const [ref, inView] = useInView();
+
+  if (inView) {
+    controls.start({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    });
+  }
+
   return (
-    <Grid size={{ xs: 12, md: 8 }}>
+    <Grid
+      size={{ xs: 12, md: 8 }}
+      component={motion.div}
+      initial={{ opacity: 0, y: 50 }}
+      animate={controls}
+      ref={ref}
+    >
       <Stack spacing={5}>
         <Box
           bgcolor="#121214"
@@ -93,10 +142,6 @@ function About() {
             color="#fff"
             sx={{ my: 3 }}
           >
-            {/* <TypewriterEffect
-              text="I am Emmanuel Kolawole, a product designer crafting user-centric design with pixel-perfect precision."
-              speed={100}
-            /> */}
             I am Emmanuel Kolawole, a product designer crafting user-centric
             design with pixel-perfect precision.
           </Text>
@@ -139,11 +184,11 @@ function About() {
             >
               {Array(10)
                 .fill()
-                .map((item) => (
+                .map((item, index) => (
                   <Image
                     src="/brands/logo.png"
                     sx={{ height: "100px" }}
-                    key={item}
+                    key={index}
                   />
                 ))}
             </Carousel>

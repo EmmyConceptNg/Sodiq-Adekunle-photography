@@ -57,15 +57,15 @@ export default function Footer({logo=true, }) {
        >
          {[
            {
-             to: "https://www.linkedin.com/company/certriddle/?viewAsMember=true",
+             to: "#",
              image: "/svgs/LinkedIn.svg",
            },
            {
-             to: "https://www.facebook.com/profile.php?id=61559952553785",
+             to: "#",
              image: "/svgs/Facebook.svg",
            },
            {
-             to: "https://x.com/CertRiddle",
+             to: "#",
              image: "/svgs/Twitter.svg",
            },
          ].map((nav, index) => (
@@ -113,15 +113,15 @@ export default function Footer({logo=true, }) {
        >
          {[
            {
-             to: "https://www.linkedin.com/company/certriddle/?viewAsMember=true",
+             to: "#",
              image: "/svgs/LinkedIn-Sm.svg",
            },
            {
-             to: "https://www.facebook.com/profile.php?id=61559952553785",
+             to: "#",
              image: "/svgs/Facebook-Sm.svg",
            },
            {
-             to: "https://x.com/CertRiddle",
+             to: "#",
              image: "/svgs/Twitter-Sm.svg",
            },
          ].map((nav, index) => (

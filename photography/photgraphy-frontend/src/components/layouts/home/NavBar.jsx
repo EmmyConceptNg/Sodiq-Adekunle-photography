@@ -5,6 +5,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import PropTypes from "prop-types";
 import Button from "../../Button";
 import { Link, useNavigate } from "react-router-dom";
+import { Action } from "./Header";
 
 export default function NavBar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -49,6 +50,8 @@ export default function NavBar() {
             </Box>
           </Link>
         ))}
+
+        <Action />
         
         
         

@@ -68,7 +68,7 @@ export default function Header(props) {
 }
 
 
-function Action() {
+export function Action() {
   const navigate = useNavigate();
   return (
     <Stack spacing={1} direction="row" alignItems="center">
