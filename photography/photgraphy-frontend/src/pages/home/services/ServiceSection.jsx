@@ -25,7 +25,7 @@ export default function ServiceSection() {
     controls.start({
       opacity: 1,
       y: 0,
-      transition: { duration: 2.0 },
+      transition: { duration: 1.0 },
     });
   }
 
