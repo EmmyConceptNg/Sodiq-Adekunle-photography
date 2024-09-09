@@ -7,7 +7,8 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
 import Projects from "./Projects";
-import Action from "./Action";
+import Action from "../../../components/Action";
+
 
 export default function Works() {
   const location = useLocation();

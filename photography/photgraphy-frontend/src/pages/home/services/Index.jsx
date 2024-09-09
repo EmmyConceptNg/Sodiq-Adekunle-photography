@@ -6,8 +6,9 @@ import Footer from "../../../components/layouts/Footer";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
-import Action from "./Action";
+
 import ServiceSection from "./ServiceSection";
+import Action from "../../../components/Action";
 
 export default function Services() {
   const location = useLocation();

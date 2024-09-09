@@ -1,11 +1,13 @@
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import Text from "../../../components/Text";
+
 import { useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import "react-multi-carousel/lib/styles.css";
-import Button from "../../../components/Button";
+import Text from "./Text";
+import Button from "./Button";
+
 
 export default function Action() {
   const controls = useAnimation();
@@ -15,7 +17,7 @@ export default function Action() {
     controls.start({
       opacity: 1,
       y: 0,
-      transition: { duration: 2.0 },
+      transition: { duration: 1.5 },
     });
   }
 
@@ -49,7 +51,7 @@ function Header() {
   return (
     <Box mx="auto">
       <Text
-        fs={{ md: "16px", xs: "12px" }}
+        fs={{ md: "24px", xs: "12px" }}
         fw="900"
         ff="Helvetica Neue"
         color="#fff"
