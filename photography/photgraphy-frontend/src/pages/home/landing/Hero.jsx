@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, CardMedia, Stack } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Text from "../../../components/Text";
 import Button from "../../../components/Button";
@@ -30,6 +30,26 @@ const responsive = {
   },
 };
 
+const responsiveSlide = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 1,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 1,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 1,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
+
 export default function Hero() {
   const controls = useAnimation();
   const [ref, inView] = useInView();
@@ -43,15 +63,18 @@ export default function Hero() {
   }
 
   return (
-    <Grid
-      container
-      spacing={5}
-      sx={{ mx: { md: "200px", xs: "15px" }, mt: 5 }}
-      ref={ref}
-    >
-      <PersonalInfo />
-      <About />
-    </Grid>
+    <>
+      <Grid
+        container
+        spacing={5}
+        sx={{ mx: { md: "200px", xs: "15px" }, mt: 5 }}
+        ref={ref}
+      >
+        <PersonalInfo />
+        <Slide />
+      </Grid>
+      <Companies />
+    </>
   );
 }
 
@@ -99,7 +122,7 @@ function PersonalInfo() {
   );
 }
 
-function About() {
+function Slide() {
   const navigate = useNavigate();
   const controls = useAnimation();
   const [ref, inView] = useInView();
@@ -124,43 +147,67 @@ function About() {
         <Box
           bgcolor="#121214"
           sx={{
-            p: { md: "40px", xs: "20px" },
+            p: { md: "0", xs: "0" },
             border: "1px solid rgba(0,0,0,.05)",
             borderRadius: "20px",
             boxShadow:
               "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
           }}
         >
-          <Text fs="16px" fw="400" color="#ccc">
-            Hello There!
-          </Text>
-
-          <Text
-            fs={{ md: "32px", xs: "24px" }}
-            fw="900"
-            ff="Helvetica Neue"
-            color="#fff"
-            sx={{ my: 3 }}
+          <Carousel
+            responsive={responsiveSlide}
+            arrows={false}
+            infinite={true}
+            autoPlay={true}
+            autoPlaySpeed={3000}
+            showDots={true}
           >
-            I am Emmanuel Kolawole, a product designer crafting user-centric
-            design with pixel-perfect precision.
-          </Text>
-
-          <Text fs="16px" fw="400" color="#2ddb81">
-            Available for Booking
-          </Text>
-
-          <Button
-            sx={{ mt: 3 }}
-            onClick={() => navigate("/contact")}
-            height="40px"
-            width="250px"
-            variant="contained"
-            color="#2DDB81"
-          >
-            Download CV
-          </Button>
+            {Array(10)
+              .fill()
+              .map((item, index) => (
+                <CardMedia
+                  key={index}
+                  component="img"
+                  height="650"
+                  image="/svgs/banner.png"
+                  alt="wedding"
+                  sx={{
+                    border: "1px solid rgba(0,0,0,.05)",
+                    borderRadius: "20px",
+                    boxShadow:
+                      "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
+                  }}
+                />
+              ))}
+          </Carousel>
         </Box>
+      </Stack>
+    </Grid>
+  );
+}
+function Companies() {
+  const navigate = useNavigate();
+  const controls = useAnimation();
+  const [ref, inView] = useInView();
+
+  if (inView) {
+    controls.start({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    });
+  }
+
+  return (
+    <Grid
+      size={{ xs: 12, md: 8 }}
+      component={motion.div}
+      initial={{ opacity: 0, y: 50 }}
+      animate={controls}
+      ref={ref}
+      sx={{ mx: { md: "200px", xs: "15px" }, mt: 5 }}
+    >
+      <Stack spacing={5}>
         <Box
           bgcolor="#121214"
           sx={{
@@ -171,9 +218,11 @@ function About() {
               "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
           }}
         >
-          <Text fs="16px" fw="400" color="#ccc">
-            Companies I've worked with
-          </Text>
+          <Box display="flex" justifyContent="center">
+            <Text fs="16px" fw="400" color="#ccc">
+              Companies I've worked with
+            </Text>
+          </Box>
           <Box mt={3}>
             <Carousel
               responsive={responsive}
@@ -210,16 +259,20 @@ function Socials() {
     >
       {[
         {
-          to: "https://www.linkedin.com/company/certriddle/?viewAsMember=true",
+          to: "#",
           image: "/svgs/LinkedIn.svg",
         },
         {
-          to: "https://www.facebook.com/profile.php?id=61559952553785",
+          to: "#",
           image: "/svgs/Facebook.svg",
         },
         {
-          to: "https://x.com/CertRiddle",
+          to: "#",
           image: "/svgs/Twitter.svg",
+        },
+        {
+          to: "#",
+          image: "/svgs/Instagram-Sm.svg",
         },
       ].map((nav, index) => (
         <Link

@@ -35,7 +35,7 @@ export default function Footer({logo=true, }) {
            <Text
              color="#fff"
              fw="400"
-             fs={{ md: "24px", xs: "15px" }}
+             fs={{ md: "24px", xs: "24px" }}
              ff="Sacramento, cursive"
            >
              Sodiq Adekunle photography
@@ -67,6 +67,10 @@ export default function Footer({logo=true, }) {
            {
              to: "#",
              image: "/svgs/Twitter.svg",
+           },
+           {
+             to: "#",
+             image: "/svgs/Instagram-Sm.svg",
            },
          ].map((nav, index) => (
            <Link

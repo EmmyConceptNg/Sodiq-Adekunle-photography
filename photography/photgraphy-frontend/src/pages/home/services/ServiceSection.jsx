@@ -54,29 +54,7 @@ export default function ServiceSection() {
           <Service />
         </Grid>
       </Box>
-      <Box sx={{ mx: { md: "200px", xs: "20px" }, mt: 5 }} ref={ref}>
-        <Grid
-          size={{ xs: 12, md: 4 }}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            bgcolor: "#121214",
-            p: { md: "40px", xs: "0" },
-            border: "1px solid rgba(0,0,0,.05)",
-            borderRadius: "20px",
-            boxShadow:
-              "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
-            textAlign: "center",
-          }}
-          component={motion.div}
-          initial={{ opacity: 0, y: 20 }}
-          animate={controls}
-        >
-          <PricingHeader />
-          <Pricing />
-        </Grid>
-      </Box>
+      {/* <PricingSection /> */}
     </>
   );
 }
@@ -93,7 +71,7 @@ function ServiceHeader() {
         color="#ccc"
         sx={{ mx: { md: 25, xs: 0 } }}
       >
-        We provide quality service 
+        We provide quality service
       </Text>
     </>
   );
@@ -116,21 +94,33 @@ function PricingHeader() {
   );
 }
 
-
-
-function Service(){
-
-
+function Service() {
   const services = [
-    {imageUrl : 'svgs/outdoor.png', title: 'Outdoor Photography', description : 'lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim'},
-    {imageUrl : 'svgs/studio.png', title: 'Studio Session Photography', description : 'lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim'},
-    {imageUrl : 'svgs/wedding.png', title: 'Wedding Photography', description : 'lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim'}
-  ]
+    {
+      imageUrl: "svgs/outdoor.png",
+      title: "Outdoor Photography",
+      description:
+        "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
+    },
+    {
+      imageUrl: "svgs/studio.png",
+      title: "Studio Session Photography",
+      description:
+        "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
+    },
+    {
+      imageUrl: "svgs/wedding.png",
+      title: "Wedding Photography",
+      description:
+        "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
+    },
+  ];
   return (
     <Grid container spacing={3} mt={4}>
       {services.map(({ imageUrl, title, description }, index) => (
         <Grid size={{ md: 4, xs: 12 }} key={index}>
-          <Box height="160px"
+          <Box
+            height="160px"
             sx={{
               p: { md: "20px", xs: "10px" },
               border: "1px solid gray",
@@ -155,55 +145,33 @@ function Service(){
     </Grid>
   );
 }
-function Pricing(){
-
-
+function Pricing() {
   const pricing = [
     {
       session: "Basic",
       price: "$300",
-      features: [
-        "lorem Ipsum",
-        "lorem Ipsum",
-        "lorem Ipsum",
-        "lorem Ipsum",
-      ],
+      features: ["lorem Ipsum", "lorem Ipsum", "lorem Ipsum", "lorem Ipsum"],
       description:
         "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
     },
     {
       session: "Basic",
       price: "$300",
-      features: [
-        "lorem Ipsum",
-        "lorem Ipsum",
-        "lorem Ipsum",
-        "lorem Ipsum",
-      ],
+      features: ["lorem Ipsum", "lorem Ipsum", "lorem Ipsum", "lorem Ipsum"],
       description:
         "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
     },
     {
       session: "Basic",
       price: "$300",
-      features: [
-        "lorem Ipsum",
-        "lorem Ipsum",
-        "lorem Ipsum",
-        "lorem Ipsum",
-      ],
+      features: ["lorem Ipsum", "lorem Ipsum", "lorem Ipsum", "lorem Ipsum"],
       description:
         "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
     },
     {
       session: "Basic",
       price: "$300",
-      features: [
-        "lorem Ipsum",
-        "lorem Ipsum",
-        "lorem Ipsum",
-        "lorem Ipsum",
-      ],
+      features: ["lorem Ipsum", "lorem Ipsum", "lorem Ipsum", "lorem Ipsum"],
       description:
         "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
     },
@@ -245,7 +213,9 @@ function Pricing(){
               </Box>
             ))}
             <Box display="flex" justifyContent="flex-start" mt={3}>
-              <Button height="40px" variant="contained">Book Now</Button>
+              <Button height="40px" variant="contained">
+                Book Now
+              </Button>
             </Box>
           </Box>
         </Grid>
@@ -254,3 +224,40 @@ function Pricing(){
   );
 }
 
+function PricingSection() {
+  const controls = useAnimation();
+  const [ref, inView] = useInView();
+
+  if (inView) {
+    controls.start({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 1.0 },
+    });
+  }
+  return (
+    <Box sx={{ mx: { md: "200px", xs: "20px" }, mt: 5 }} ref={ref}>
+      <Grid
+        size={{ xs: 12, md: 4 }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          bgcolor: "#121214",
+          p: { md: "40px", xs: "0" },
+          border: "1px solid rgba(0,0,0,.05)",
+          borderRadius: "20px",
+          boxShadow:
+            "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
+          textAlign: "center",
+        }}
+        component={motion.div}
+        initial={{ opacity: 0, y: 20 }}
+        animate={controls}
+      >
+        <PricingHeader />
+        <Pricing />
+      </Grid>
+    </Box>
+  );
+}

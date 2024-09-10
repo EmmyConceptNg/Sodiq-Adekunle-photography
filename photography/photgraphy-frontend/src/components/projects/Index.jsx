@@ -190,7 +190,7 @@ function ProjectTab() {
                         }}
                       >
                         <IconButton
-                          href="/works/:id" // Link to your single page
+                          href="/portfolio/:id" // Link to your single page
                           sx={{
                             bgcolor: "rgba(0,0,0,0.5)",
                             "&:hover": {
@@ -222,14 +222,14 @@ function ProjectTab() {
           {Array(2)
             .fill()
             .map((item, index) => (
-              <Grid size={{ xs: 12, md: 4 }} key={index}>
+              <Grid size={{ xs: 12, md: 4, sm:6 }} key={index}>
                 <Card
                   sx={{
                     borderBottomLeftRadius: "12px",
                     borderBottomRightRadius: "12px",
                     border: "1px solid gray",
                     bgcolor: "transparent",
-                    position: "relative", // Added for hover effect
+                    position: "relative",
                   }}
                 >
                   <CardActionArea>
@@ -249,7 +249,7 @@ function ProjectTab() {
                         sx={{
                           transition: "0.3s",
                           "&:hover": {
-                            filter: "brightness(70%)", // Darken the image on hover
+                            filter: "brightness(70%)",
                           },
                         }}
                       />
@@ -265,7 +265,7 @@ function ProjectTab() {
                         }}
                       >
                         <IconButton
-                          href="/works/:id" // Link to your single page
+                          href="/portfolio/:id"
                           sx={{
                             bgcolor: "rgba(0,0,0,0.5)",
                             "&:hover": {
@@ -297,7 +297,7 @@ function ProjectTab() {
           {Array(4)
             .fill()
             .map((item, index) => (
-              <Grid size={{ xs: 12, md: 4 }} key={index}>
+              <Grid size={{ xs: 12, md: 4, sm:6 }} key={index}>
                 <Card
                   sx={{
                     borderBottomLeftRadius: "12px",
@@ -340,7 +340,7 @@ function ProjectTab() {
                         }}
                       >
                         <IconButton
-                          href="/works/:id" // Link to your single page
+                          href="/portfolio/:id" // Link to your single page
                           sx={{
                             bgcolor: "rgba(0,0,0,0.5)",
                             "&:hover": {

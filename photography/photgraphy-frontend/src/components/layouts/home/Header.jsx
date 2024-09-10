@@ -44,7 +44,7 @@ export default function Header(props) {
           <Text
             color="#fff"
             fw="400"
-            fs={{ md: "24px", xs: "15px" }}
+            fs={{ md: "24px", xs: "24px" }}
             ff="Sacramento, cursive"
           >
             Sodiq Adekunle photography

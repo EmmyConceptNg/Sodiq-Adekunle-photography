@@ -9,8 +9,8 @@ export const HomeRoutes = () => {
   return [
     { path: "/", element: <Home /> },
     { path: "/about", element: <About /> },
-    { path: "/works", element: <Works /> },
-    { path: "/works/:id", element: <SingleProject /> },
+    { path: "/portfolio", element: <Works /> },
+    { path: "/portfolio/:id", element: <SingleProject /> },
     { path: "/service", element: <Services /> },
     { path: "/contact", element: <Contact /> },
   ];
