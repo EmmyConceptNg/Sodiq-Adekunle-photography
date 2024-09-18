@@ -1,84 +1,46 @@
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Tab,
-  Tabs,
-  IconButton,
-} from "@mui/material";
-import Grid from "@mui/material/Grid2";
-
 import { useState } from "react";
-import { motion, useAnimation } from "framer-motion";
-import { useInView } from "react-intersection-observer";
 import PropTypes from "prop-types";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Grid2, IconButton, Stack, Tab, Tabs } from "@mui/material";
+import Text from "../../../components/Text";
 import { OpenInNew } from "@mui/icons-material";
-import Text from "../Text";
+import Button from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
+import AddPortfolioModal from "../../../components/modals/portfolio/AddPortfolioModal";
 
-
-export default function Projects() {
-  const controls = useAnimation();
-  const [ref, inView] = useInView();
-
-  if (inView) {
-    controls.start({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 2.0 },
-    });
-  }
-
+export default function Portfolio(props) {
+  const [services, setServices] = useState([])
   return (
-    <Box sx={{ mx: { md: "200px", xs: "20px" }, mt: 5 }} ref={ref}>
-      <Grid
-        size={{ xs: 12, md: 4 }}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          bgcolor: "#121214",
-          p: { md: "40px", xs: "0" },
-          border: "1px solid rgba(0,0,0,.05)",
-          borderRadius: "20px",
-          boxShadow:
-            "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
-          textAlign: "center",
-        }}
-        component={motion.div}
-        initial={{ opacity: 0, y: 20 }}
-        animate={controls}
-      >
-        <Header />
-        <Box mt={3}>
-          <ProjectTab />
-        </Box>
-      </Grid>
-    </Box>
+    <Stack spacing={3}>
+      <Header services={services} setServices={setServices} />
+      <ProjectTab services={services} setServices={setServices} />
+    </Stack>
   );
 }
 
-function Header() {
+function Header({services, setServices}) {
+
+  const [addPortfolio, setAddPortfolio] = useState(false)
+
   return (
     <>
-      <Text fs="40px" fw="900" ff="Helvetica Neue" color="#fff">
-        Projects
-      </Text>
-      <Text
-        fs={{ md: "16px", xs: "12px" }}
-        fw="400"
-        color="#ccc"
-        sx={{ mx: { md: 25, xs: 0 } }}
-      >
-        Check out some of my design projects, meticulously crafted with love and
-        dedication, each one reflecting the passion and soul I poured into every
-        detail.
-      </Text>
+    <AddPortfolioModal open={addPortfolio} setOpen={setAddPortfolio} services={services} setServices={setServices} />
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Box>
+          <Text fs="32px" fw="900" ff="Helvetica Neue" color="#fff">
+            Portfolio
+          </Text>
+          <Text fs="16px" fw="400" color="gray">
+            Manage portfolio
+          </Text>
+        </Box>
+        <Button variant="contained" height="45px" onClick={() => setAddPortfolio(true)}>
+          Add Portfolio
+        </Button>
+      </Stack>
     </>
   );
 }
+
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -103,12 +65,20 @@ function a11yProps(index) {
   };
 }
 
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+
 function ProjectTab() {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   const navigate = useNavigate()
 
   return (
@@ -145,11 +115,11 @@ function ProjectTab() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Grid container spacing={2}>
+        <Grid2 container spacing={2}>
           {Array(10)
             .fill()
             .map((item, index) => (
-              <Grid size={{ xs: 12, md: 4, sm: 6 }} key={index}>
+              <Grid2 size={{ xs: 12, md: 4, sm: 6 }} key={index}>
                 <Card
                   sx={{
                     borderBottomLeftRadius: "12px",
@@ -192,7 +162,7 @@ function ProjectTab() {
                         }}
                       >
                         <IconButton
-                          onClick={()=>navigate("/portfolio/:id")} // Link to your single page
+                          onClick={()=>navigate("/admin/portfolio/:id")} // Link to your single page
                           sx={{
                             bgcolor: "rgba(0,0,0,0.5)",
                             "&:hover": {
@@ -215,16 +185,16 @@ function ProjectTab() {
                     </CardContent>
                   </CardActionArea>
                 </Card>
-              </Grid>
+              </Grid2>
             ))}
-        </Grid>
+        </Grid2>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Grid container spacing={2}>
+        <Grid2 container spacing={2}>
           {Array(2)
             .fill()
             .map((item, index) => (
-              <Grid size={{ xs: 12, md: 4, sm:6 }} key={index}>
+              <Grid2 size={{ xs: 12, md: 4, sm: 6 }} key={index}>
                 <Card
                   sx={{
                     borderBottomLeftRadius: "12px",
@@ -267,7 +237,7 @@ function ProjectTab() {
                         }}
                       >
                         <IconButton
-                          onClick={()=>navigate("/portfolio/:id")}
+                          onClick={()=>navigate("/admin/portfolio/:id")}
                           sx={{
                             bgcolor: "rgba(0,0,0,0.5)",
                             "&:hover": {
@@ -290,16 +260,16 @@ function ProjectTab() {
                     </CardContent>
                   </CardActionArea>
                 </Card>
-              </Grid>
+              </Grid2>
             ))}
-        </Grid>
+        </Grid2>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <Grid container spacing={2}>
+        <Grid2 container spacing={2}>
           {Array(4)
             .fill()
             .map((item, index) => (
-              <Grid size={{ xs: 12, md: 4, sm:6 }} key={index}>
+              <Grid2 size={{ xs: 12, md: 4, sm: 6 }} key={index}>
                 <Card
                   sx={{
                     borderBottomLeftRadius: "12px",
@@ -342,7 +312,7 @@ function ProjectTab() {
                         }}
                       >
                         <IconButton
-                          onClick={()=>navigate("/portfolio/:id")} // Link to your single page
+                          onClick={()=>navigate("/admin/portfolio/:id")} // Link to your single page
                           sx={{
                             bgcolor: "rgba(0,0,0,0.5)",
                             "&:hover": {
@@ -365,16 +335,16 @@ function ProjectTab() {
                     </CardContent>
                   </CardActionArea>
                 </Card>
-              </Grid>
+              </Grid2>
             ))}
-        </Grid>
+        </Grid2>
       </CustomTabPanel>
     </Box>
   );
 }
 
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
+Portfolio.propTypes = {};
+Header.propTypes ={
+  services: PropTypes.array,
+  setServices: PropTypes.func
+}

@@ -1,4 +1,4 @@
-import { Box, Checkbox, Grid, Stack } from "@mui/material";
+import { Box, Checkbox, Grid2, Stack } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 
@@ -115,8 +115,8 @@ export default function Login() {
   return (
     <Box height="100vh" ml={{ lg: 20, xs: 0 }}>
       <ToastContainer />
-      <Grid container spacing={1} justifyContent="space-between">
-        <Grid item md={12} lg={7} xs={12} sm={12}>
+      <Grid2 container spacing={1} justifyContent="space-between">
+        <Grid2 size={{ md:12, lg:6, xs:12, sm:12}}>
           <Stack
             justifyContent="space-between"
             alignItems="space-between"
@@ -129,7 +129,14 @@ export default function Login() {
                 display="flex"
                 justifyContent={{ lg: "flex-start", xs: "center" }}
               >
-                <Box component="img" src="/svgs/Logo.svg" width="242px" />
+                <Text
+                  color="#fff"
+                  fw="400"
+                  fs={{ md: "24px", xs: "24px" }}
+                  ff="Sacramento, cursive"
+                >
+                  Sodiq Adekunle photography
+                </Text>
               </Box>
               <Stack
                 my="auto"
@@ -227,50 +234,14 @@ export default function Login() {
                     </Text>
                   </Box>
                 </Box>
-
-                <Box>
-                  <Button
-                    onClick={signUpWithGoogle}
-                    width="100%"
-                    height="44px"
-                    variant="outlined"
-                    color="#D0D5DD"
-                    startIcon={<Icon icon="devicon:google" />}
-                  >
-                    Sign in with Google
-                  </Button>
-                </Box>
-                <Box display="flex" justifyContent={"center"}>
-                  <Text
-                    sx={{ textAlign: "center" }}
-                    color="#fff"
-                    fs="14px"
-                    fw="400"
-                  >
-                    Don't have an account?
-                  </Text>
-                  <Text
-                    fs="14px"
-                    fw="700"
-                    to="/signup"
-                    sx={{
-                      textAlign: "center",
-                      marginLeft: 1,
-                      color: "#2DDB81",
-                      cursor: "pointer",
-                    }}
-                  >
-                    SignUp
-                  </Text>
-                </Box>
               </Stack>
             </Box>
             <Box sx={{ alignSelf: "flex-end", width: "100%" }}>
               <Footer logo={false} />
             </Box>
           </Stack>
-        </Grid>
-        <Grid item md={12} lg={5} xs={12} sm={12}>
+        </Grid2>
+        <Grid2 size={{ md:12, lg:6, xs:12, sm:12 }}>
           <Box
             sx={{
               height: { lg: "100vh", xs: "100%" },
@@ -281,7 +252,7 @@ export default function Login() {
           >
             <Box
               component="img"
-              src="svgs/Auth-Img.svg"
+              src="svgs/auth-image.png"
               alt="Authentication"
               sx={{
                 position: "absolute",
@@ -294,8 +265,8 @@ export default function Login() {
               }}
             />
           </Box>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Box>
   );
 }

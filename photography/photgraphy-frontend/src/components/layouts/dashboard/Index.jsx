@@ -21,11 +21,11 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
 
-  // useEffect(() => {
-  //   if(!user._id){
-  //     navigate('/login')
-  //   }
-  // },[user, navigate])
+  useEffect(() => {
+    if(!user._id){
+      navigate('/login')
+    }
+  },[user, navigate])
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -108,7 +108,7 @@ export default function DashboardLayout() {
               padding: 2,
             }}
           >
-            <Toolbar>
+            <Toolbar sx={{ alignItems:'center' }}>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -116,11 +116,16 @@ export default function DashboardLayout() {
                 onClick={handleDrawerToggle}
                 sx={{ mr: 2, display: { md: "none" } }}
               >
-                <Menu sx={{ color: "#000" }} />
+                <Menu sx={{ color: "#fff" }} />
               </IconButton>
-              <Box>
-                <Text fs="23px" fw="550" color="#fff">
-                  Overview
+              <Box display={{ md : 'none' }}>
+                <Text
+                  color="#fff"
+                  fw="400"
+                  fs={{ md: "24px", xs: "24px" }}
+                  ff="Sacramento, cursive"
+                >
+                  Sodiq Adekunle photography
                 </Text>
               </Box>
               <Box sx={{ flexGrow: 1 }} />
@@ -135,7 +140,6 @@ export default function DashboardLayout() {
               minWidth: "100%",
               marginTop: "80px",
               p: { md: 5, lg: 6, sm: 2, xs: 1 },
-              
             }}
           >
             {/* ------------------------------------------- */}

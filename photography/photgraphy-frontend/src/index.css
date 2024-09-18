@@ -105,6 +105,8 @@ p {
   scrollbar-color: #ff9d43 #f1f1f1; /* thumb and track color */
 }
 
+
+
 @media (max-width: 1024px) {
     .css-18zdsne-MuiPaper-root-MuiAppBar-root {
         padding: 0 50px !important; /* Override padding specifically */

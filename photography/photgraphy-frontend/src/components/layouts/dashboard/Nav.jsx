@@ -42,13 +42,6 @@ export default function Nav(){
       <>
         <Box display={{ xs: "none", sm: "flex" }} alignItems="center">
           <Stack direction="row" spacing={2}>
-            <SearchInput
-              height="50px"
-              rounded
-              placeholder="search for something"
-            />
-            
-
             <Box display="flex" alignItems="center">
               <IconButton
                 size="small"

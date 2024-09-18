@@ -1,4 +1,4 @@
-import { Box, Checkbox, Grid, Stack } from "@mui/material";
+import { Box, Checkbox, Grid2, Stack } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 
@@ -36,8 +36,8 @@ export default function Password() {
   return (
     <Box height="100vh" ml={{ lg: 20, xs: 0 }}>
       <ToastContainer />
-      <Grid container spacing={1} justifyContent="space-between">
-        <Grid item md={12} lg={7} xs={12} sm={12}>
+      <Grid2 container spacing={1} justifyContent="space-between">
+        <Grid2 size={{ md:12, lg:6, xs:12, sm:12 }}>
           <Stack
             justifyContent="space-between"
             alignItems="space-between"
@@ -50,7 +50,14 @@ export default function Password() {
                 display="flex"
                 justifyContent={{ lg: "flex-start", xs: "center" }}
               >
-                <Box component="img" src="/svgs/Logo.svg" width="242px" />
+                <Text
+                  color="#fff"
+                  fw="400"
+                  fs={{ md: "24px", xs: "24px" }}
+                  ff="Sacramento, cursive"
+                >
+                  Sodiq Adekunle photography
+                </Text>
               </Box>
               <Stack
                 my="auto"
@@ -127,8 +134,8 @@ export default function Password() {
               <Footer logo={false} />
             </Box>
           </Stack>
-        </Grid>
-        <Grid item md={12} lg={5} xs={12} sm={12}>
+        </Grid2>
+        <Grid2 size={{ md:12, lg:6, xs:12, sm:12 }}>
           <Box
             sx={{
               height: { lg: "100vh", xs: "100%" },
@@ -139,7 +146,7 @@ export default function Password() {
           >
             <Box
               component="img"
-              src="/svgs/Auth-Img.svg"
+              src="/svgs/auth-image.png"
               alt="Authentication"
               sx={{
                 position: "absolute",
@@ -152,8 +159,8 @@ export default function Password() {
               }}
             />
           </Box>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Box>
   );
 }

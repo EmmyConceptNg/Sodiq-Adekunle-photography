@@ -4,7 +4,6 @@ export const newsletterValidation = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required"),
 });
 
-
 export const pinValidation = Yup.object({
   pin1: Yup.string().required("Required").length(1, "Invalid"),
   pin2: Yup.string().required("Required").length(1, "Invalid"),
@@ -43,13 +42,17 @@ export const userValidation = Yup.object({
       "Password must contain at least one special character (@, $, !, %, *, ?, &, _, etc.)."
     ),
 });
-
-
-
-
-
-
-
+export const userDetailValidation = Yup.object({
+  firstName: Yup.string().required("Required"),
+  lastName: Yup.string().required("Required"),
+  phone: Yup.string().required("Required"),
+  address: Yup.string().required("Required"),
+  linkedIn: Yup.string().url("Invalid URL format"),
+  instagram: Yup.string().url("Invalid URL format"),
+  facebook: Yup.string().url("Invalid URL format"),
+  twitter: Yup.string().url("Invalid URL format"),
+  email: Yup.string().email("Invalid email address").required("Required"),
+});
 
 export const notify = (message, type) => {
   const notifyObject = {
@@ -87,8 +90,8 @@ export const notify = (message, type) => {
   }[type]();
 };
 
- export const stripHtmlTags = (html) => {
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    return div.textContent || div.innerText || "";
-  };
+export const stripHtmlTags = (html) => {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent || div.innerText || "";
+};
