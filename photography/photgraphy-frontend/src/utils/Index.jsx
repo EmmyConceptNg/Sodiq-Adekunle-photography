@@ -27,7 +27,6 @@ export const passwordEmailValidation = Yup.object({
 });
 
 export const userValidation = Yup.object({
-  fullName: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email address").required("Required"),
   password: Yup.string()
     .required("Password is required.")

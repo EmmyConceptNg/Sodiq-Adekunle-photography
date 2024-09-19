@@ -2,6 +2,7 @@ import { Box, Card, Divider, Grid2, Stack } from '@mui/material'
 import Text from '../../../components/Text';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function Dashboard() {
   return (
@@ -15,10 +16,11 @@ export default function Dashboard() {
 
 
 function Header (){
+  const user = useSelector(state => state.user.details)
   return (
     <Box>
       <Text fs="32px" fw="900" ff="Helvetica Neue" color="#fff">
-        Welcome Admin
+        Welcome {user?.firstName ? user?.firstName + ' ' + user?.lastName : 'Admin'}
       </Text>
       <Text fs="16px" fw="400" color="gray">
         Manage your entire application from here

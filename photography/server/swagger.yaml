@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: Adekunle Server API
+  version: 1.0.0
+  description: API for Admin management 
+
+  servers:
+  - url: http://localhost:8080
+    description: Local Development Server
+
+paths:
+  /api/auth/signin:
+    get:
+      summary: Login Admin User
+      responses:
+        200:
+          description: Login Admin User
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  type: string

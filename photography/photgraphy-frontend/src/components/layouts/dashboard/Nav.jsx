@@ -97,7 +97,7 @@ export default function Nav(){
           <MenuItem>
             <Box>
               <Text ml={2} fw="600" fs="24px" color="#1A1A1A">
-                {user?.fullName ?? ""}
+                {user?.firstName ? user?.firstName + ' ' + user?.lastName : user?.email.split("@")[0]}
               </Text>
             </Box>
           </MenuItem>
@@ -105,13 +105,13 @@ export default function Nav(){
           <MenuItem
             onClick={() => {
               handleClose();
-              navigate("/dashboard/settings");
+              navigate("/admin/settings");
             }}
           >
             <ListItemIcon>
               <PersonOutlined fontSize="small" />
             </ListItemIcon>
-            View my Profile
+Settings
           </MenuItem>
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
