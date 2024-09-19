@@ -12,7 +12,6 @@ import { setUser } from "../../redux/UserReducer";
 import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 
-
 export default function Login() {
   const initialValues = {
     email: "",
@@ -32,7 +31,8 @@ export default function Login() {
       .then((response) => {
         const { user, accessToken, refreshToken } = response.data;
         console.log(user);
-         dispatch(setUser({ user, accessToken, refreshToken }));
+        dispatch(setUser({ user, accessToken, refreshToken }));
+        notify(response?.data?.message, "success");
         navigate("/admin");
       })
       .catch((error) => {

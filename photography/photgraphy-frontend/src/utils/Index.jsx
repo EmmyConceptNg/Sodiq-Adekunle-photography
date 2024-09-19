@@ -58,7 +58,7 @@ export const notify = (message, type) => {
     info: () =>
       toast.info(message, {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 4000,
         toastId: "01",
         transition: Zoom,
       }),
@@ -66,7 +66,7 @@ export const notify = (message, type) => {
     success: () =>
       toast.success(message, {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 4000,
         toastId: "02",
         transition: Zoom,
       }),
@@ -74,7 +74,7 @@ export const notify = (message, type) => {
     warn: () =>
       toast.warn(message, {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 4000,
         toastId: "03",
         transition: Zoom,
       }),

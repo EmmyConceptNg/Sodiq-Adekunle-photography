@@ -1,19 +1,14 @@
-import {
-  Box,
-  Modal,
-  Stack,
-  Grid2,
-} from "@mui/material";
+import { Box, Modal, Stack, Grid, Grid2 } from "@mui/material";
 import * as Yup from "yup";
 import { useState } from "react";
 import Button from "../../Button";
 import PropTypes from "prop-types";
 import axios from "../../../api/axios";
-
 import { ToastContainer } from "react-toastify";
 import { notify } from "../../../utils/Index";
 import Input from "../../Input";
 import { Form, Formik } from "formik";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -30,37 +25,50 @@ const style = {
   p: 4,
 };
 
-export default function AddServiceModal({ open, setOpen, setServices, services }) {
-
+export default function AddServiceModal({
+  open,
+  setOpen,
+  setServices,
+  services,
+}) {
   const initialValues = {
-    service : ''
+    name: "",
   };
 
+  // Access Redux tokens
+  const accessToken = useSelector((state) => state.user.accessToken);
+  const refreshToken = useSelector((state) => state.user.refreshToken);
+
   const validation = Yup.object({
-    service: Yup.string().required("Required"),
+    name: Yup.string().required("Required"),
   });
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  
-  const [creating, setCreating] = useState(false);
+ const handleUpdate = async (values, actions) => {
+   try {
+     const response = await axios.post("/api/services", values, {
+       headers: {
+         "Content-Type": "application/json",
+         Authorization: `Bearer ${accessToken}`, 
+       },
+     });
 
-  const handleUpdate = async (e) => {
-    e.preventDefault(true);
-    if (!initialValues?.service) {
-      notify("Please fill all input fields", "error");
-      return false;
-    }
-    setCreating(true);
-    try {
-    
-    } catch (error) {
-      console.error("Error saving editing:", error);
-      setCreating(false);
-    }
-  };
+     // On success, update services state and close modal
+     const { services } = response.data;
+     setServices(services);
+     notify("Service added successfully!", "success");
+     setOpen(false);
+   } catch (error) {
+     console.error("Error adding service:", error);
+     notify(error.response.data.message || "Error occurred", "error");
+   } finally {
+     actions.setSubmitting(false);
+   }
+ };
+
 
   return (
     <>
@@ -77,7 +85,7 @@ export default function AddServiceModal({ open, setOpen, setServices, services }
             validationSchema={validation}
             onSubmit={handleUpdate}
           >
-            {({ isSubmitting, setFieldValue }) => (
+            {({ isSubmitting }) => (
               <Form>
                 <Stack spacing={10}>
                   <Grid2 container spacing={{ md: 5, xs: 0 }}>
@@ -90,11 +98,7 @@ export default function AddServiceModal({ open, setOpen, setServices, services }
                         name: "name",
                       },
                     ].map((item, index) => (
-                      <Grid2
-                        size={{ md: 12, xs: 12 }}
-                        key={index}
-                        mb={{ xs: 5, md: 0 }}
-                      >
+                      <Grid2 size={12} key={index} mb={{ xs: 5, md: 0 }}>
                         <Box display="flex">
                           <Input
                             name={item.name}
@@ -106,7 +110,6 @@ export default function AddServiceModal({ open, setOpen, setServices, services }
                             aria-label={item.label}
                             type={item.type}
                             defaultValue={item?.defaultValue}
-                            onInput={item.onInput}
                           />
                         </Box>
                       </Grid2>
@@ -146,8 +149,8 @@ export default function AddServiceModal({ open, setOpen, setServices, services }
 }
 
 AddServiceModal.propTypes = {
-  open: PropTypes.bool,
-  setOpen: PropTypes.func,
-  setServices: PropTypes.func,
-  services: PropTypes.array,
+  open: PropTypes.bool.isRequired,
+  setOpen: PropTypes.func.isRequired,
+  setServices: PropTypes.func.isRequired,
+  services: PropTypes.array.isRequired,
 };

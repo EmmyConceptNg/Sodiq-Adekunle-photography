@@ -30,7 +30,9 @@ export default function Signup() {
       .then((response) => {
         const { user, accessToken, refreshToken } = response.data;
         console.log(user);
+        
          dispatch(setUser({ user, accessToken, refreshToken }));
+         notify(response?.data?.message, "success");
         navigate("/admin");
       })
       .catch((error) => {
