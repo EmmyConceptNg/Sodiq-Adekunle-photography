@@ -22,7 +22,7 @@ export default function DashboardLayout() {
   const user = useSelector((state) => state.user.details);
 
   useEffect(() => {
-    if(!user._id){
+    if(!user?._id){
       navigate('/login')
     }
   },[user, navigate])
