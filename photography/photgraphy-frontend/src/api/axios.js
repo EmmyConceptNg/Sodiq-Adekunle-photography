@@ -7,7 +7,7 @@ let baseURL = "";
 if (window.location.origin.includes("localhost")) {
   baseURL = "http://localhost:8080";
 } else {
-  baseURL = "https://prince-server-kck2.onrender.com";
+  baseURL = "https://sodiq-adekunle-photography.onrender.com";
 }
 
 const instance = axios.create({
