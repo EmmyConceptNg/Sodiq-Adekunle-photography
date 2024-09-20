@@ -6,12 +6,6 @@ export const MenuItems = [
     link: "/admin/dashboard",
   },
   {
-    id: "services",
-    name: "Services",
-    icon: "arcticons:services",
-    link: "/admin/services",
-  },
-  {
     id: "portfolio",
     name: "Portfolio",
     icon: "bytesize:portfolio",

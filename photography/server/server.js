@@ -8,7 +8,7 @@ dotenv.config();
 import helmet from "helmet";
 import morgan from "morgan";
 import userRoutes from "./routes/authRoutes.js";
-import servicesRoutes from "./routes/serviceRoutes.js";
+import portfoliosRoutes from "./routes/portfolioRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { errorProcessing, logErrorToFile } from "./middleware/errorHandler.js";
@@ -56,7 +56,7 @@ app.get("/", function (req, res) {
   res.send("Welcome to adekunle server");
 });
 app.use("/api/auth", userRoutes);
-app.use("/api/services", servicesRoutes);
+app.use("/api/portfolios", portfoliosRoutes);
 
 // Swagger Api Documentation
 const swaggerDocument = YAML.load(path.resolve(__dirname, "swagger.yaml"));

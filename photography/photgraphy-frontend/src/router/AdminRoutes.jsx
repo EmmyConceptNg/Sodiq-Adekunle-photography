@@ -1,11 +1,11 @@
 import { Navigate } from "react-router-dom";
 import DashboardLayout from "../components/layouts/dashboard/Index";
 import Dashboard from "../pages/admin/dashboard/Index";
-import Services from "../pages/admin/services/Index";
-import Portfolio from "../pages/admin/portfolio/Index";
+
 import SinglePortfolio from "../pages/admin/portfolio/single-portfolio/Index";
 import EducationAndExperience from "../pages/admin/education-and-experience/Index";
 import Settings from "../pages/admin/settings/Index";
+import Portfolio from "../pages/admin/portfolios/Index";
 
 export const AdminRoutes = () => {
   return [
@@ -17,10 +17,6 @@ export const AdminRoutes = () => {
         {
           path: "dashboard",
           element: <Dashboard />,
-        },
-        {
-          path: "services",
-          element: <Services />,
         },
         {
           path: "portfolio",

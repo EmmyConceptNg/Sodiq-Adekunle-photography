@@ -33,9 +33,9 @@ const style = {
   p: 4,
 };
 
-export default function EditServiceModal({ open, setOpen, setServices, selectedService, services }) {
+export default function EditPortfolioModal({ open, setOpen, setPortfolios, selectedPortfolio, portfolios }) {
   const initialValues = {
-    name: selectedService.name ?? "",
+    name: selectedPortfolio.name ?? "",
   };
 
   const validation = Yup.object({
@@ -67,7 +67,7 @@ export default function EditServiceModal({ open, setOpen, setServices, selectedS
   const handleUpdate = async (values, actions) => {
     try {
       const response = await axios.put(
-        `/api/services/${selectedService?._id}`,
+        `/api/portfolios/${selectedPortfolio?._id}`,
         values,
         {
           headers: {
@@ -77,21 +77,21 @@ export default function EditServiceModal({ open, setOpen, setServices, selectedS
         }
       );
 
-      // On success, update services state and close modal
-      const { service } = response.data;
+      // On success, update portfolios state and close modal
+      const { portfolio } = response.data;
 
-      // Update the services state by replacing the updated service in the array
-      const updatedServices = services?.map((s) =>
-        s._id === service._id ? service : s
+      // Update the portfolios state by replacing the updated portfolio in the array
+      const updatedPortfolios = portfolios?.map((s) =>
+        s._id === portfolio._id ? portfolio : s
       );
 
-      setServices(updatedServices);
+      setPortfolios(updatedPortfolios);
        handleSuccess(
          response.data.message || "You have successfully deleted this data"
        );
       setOpen(false);
     } catch (error) {
-      console.error("Error updating service:", error);
+      console.error("Error updating portfolio:", error);
        handleError(
         error.response?.data?.message || "An error occurred. Please try again"
       );
@@ -128,8 +128,8 @@ export default function EditServiceModal({ open, setOpen, setServices, selectedS
                   <Grid2 container spacing={{ md: 5, xs: 0 }}>
                     {[
                       {
-                        label: "Service Name",
-                        placeholder: "Service Name",
+                        label: "portfolio Name",
+                        placeholder: "portfolio Name",
                         required: true,
                         type: "text",
                         name: "name",
@@ -189,9 +189,10 @@ export default function EditServiceModal({ open, setOpen, setServices, selectedS
   );
 }
 
-EditServiceModal.propTypes = {
+EditPortfolioModal.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
-  setServices: PropTypes.func,
-  selectedService: PropTypes.object,
+  setPortfolios: PropTypes.func,
+  selectedPortfolio: PropTypes.object,
+  portfolios: PropTypes.array
 };

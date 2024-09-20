@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,23 +11,23 @@ import { Box, IconButton, Skeleton, Stack } from "@mui/material";
 import Text from "../../../components/Text";
 import { DeleteForever, Edit } from "@mui/icons-material";
 import Button from "../../../components/Button";
-import AddServiceModal from "../../../components/modals/services/AddServiceModal";
-import EditServiceModal from "../../../components/modals/services/EditServiceModal";
+
+import AddPortfolioModal from "../../../components/modals/portfolios/AddPortfolioModal";
+import EditPortfolioModal from "../../../components/modals/portfolios/EditPortfolioModal";
 import DeleteModal from "../../../components/modals/others/DeleteModal";
 import { useSelector } from "react-redux";
 import axios from "../../../api/axios";
 import EmptyState from "../../../components/EmptyState";
 
-export default function Services(props) {
-  const [services, setServices] = useState([]);
+export default function Portfolio() {
+  const [portfolios, setPortFolios] = useState([]);
   const [tableLoad, setTableLoad] = useState(true);
 
   const accessToken = useSelector((state) => state.user.accessToken);
-  const refreshToken = useSelector((state) => state.user.refreshToken);
 
   useEffect(() => {
     axios
-      .get("/api/services", {
+      .get("/api/portfolios", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -35,67 +35,67 @@ export default function Services(props) {
       })
       .then((response) => {
         console.log(response.data);
-        setServices(response.data.services);
+        setPortFolios(response.data.portfolios);
         setTableLoad(false);
       });
   }, [accessToken]);
 
   return (
     <Stack spacing={3}>
-      <Header services={services} setServices={setServices} />
-      <ServiceTable
-        setServices={setServices}
+      <Header portfolios={portfolios} setPortFolios={setPortFolios} />
+      <PortfolioTable
+        setPortFolios={setPortFolios}
         tableLoad={tableLoad}
-        services={services}
+        portfolios={portfolios}
       />
     </Stack>
   );
 }
 
-function Header({ services, setServices }) {
-  const [addService, setAddService] = useState(false);
+function Header({ portfolios, setPortfolios }) {
+  const [addPortfolio, setAddPortfolio] = useState(false);
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Box>
           <Text fs="32px" fw="900" ff="Helvetica Neue" color="#fff">
-            Services
+            Portfolios
           </Text>
           <Text fs="16px" fw="400" color="gray">
-            Manage all services
+            Manage all portfolios
           </Text>
         </Box>
         <Button
           variant="contained"
           height="45px"
-          onClick={() => setAddService(true)}
+          onClick={() => setAddPortfolio(true)}
         >
-          <span style={{ color: "#000" }}>Add Service</span>
+          <span style={{ color: "#000" }}>Add Portfolio</span>
         </Button>
       </Stack>
-      <AddServiceModal
-        open={addService}
-        setOpen={setAddService}
-        services={services}
-        setServices={setServices}
+      <AddPortfolioModal
+        open={addPortfolio}
+        setOpen={setAddPortfolio}
+        portfolios={portfolios}
+        setPortFolios={setPortfolios}
       />
     </>
   );
 }
 
-function ServiceTable({ setServices, tableLoad, services }) {
-  const [editService, setEditService] = useState(false);
-  const [selectedService, setSelectedService] = useState({});
-  const [deleteService, setDeleteService] = useState(false);
+function PortfolioTable({ setPortfolios, tableLoad, portfolios }) {
+  const [editPortfolio, setEditPortfolio] = useState(false);
+  const [selectedPortfolio, setSelectedPortfolio] = useState({});
+  const [deletePortfolio, setDeletePortfolio] = useState(false);
   const [delId, setDelId] = useState("");
 
   const handleEdit = (item) => {
-    setSelectedService(item);
-    setEditService(true);
+    setSelectedPortfolio(item);
+    setEditPortfolio(true);
   };
   const handleDelete = (item) => {
     setDelId(item);
-    setDeleteService(true);
+    setDeletePortfolio(true);
   };
   return (
     <>
@@ -111,7 +111,7 @@ function ServiceTable({ setServices, tableLoad, services }) {
           textAlign: "center",
         }}
       >
-        <Table sx={{ width: "100%" }} aria-label="services table">
+        <Table sx={{ width: "100%" }} aria-label="portfolios table">
           <TableHead>
             <TableRow>
               {[
@@ -138,7 +138,7 @@ function ServiceTable({ setServices, tableLoad, services }) {
             {tableLoad ? (
               <TableLoad />
             ) : (
-              services?.map((row, index) => (
+              portfolios?.map((row, index) => (
                 <TableRow
                   key={row.name}
                   sx={{
@@ -195,27 +195,27 @@ function ServiceTable({ setServices, tableLoad, services }) {
             )}
           </TableBody>
         </Table>
-        {!tableLoad && !services?.length > 0 && (
+        {!tableLoad && !portfolios?.length > 0 && (
          <Box mt={4}>
-          <EmptyState message="You have not added any service." button="Add Service" />
+          <EmptyState message="You have not added any portfolio." button="Add portfolio" />
          </Box>
         )}
       </TableContainer>
-      <EditServiceModal
-        open={editService}
-        setOpen={setEditService}
-        selectedService={selectedService}
-        setServices={setServices}
-        services={services}
+      <EditPortfolioModal
+        open={editPortfolio}
+        setOpen={setEditPortfolio}
+        selectedPortfolio={selectedPortfolio}
+        setPortfolios={setPortfolios}
+        portfolios={portfolios}
       />
       {delId != "" && (
         <DeleteModal
-          open={deleteService}
-          setOpen={setDeleteService}
+          open={deletePortfolio}
+          setOpen={setDeletePortfolio}
           delId={delId}
-          route={`/api/services/${delId}`}
-          description="You about to delete this service. Please note that deleting this service will delete corresponding projects."
-          cleanUp={setServices}
+          route={`/api/portfolios/${delId}`}
+          description="You about to delete this portfolio. Please note that deleting this portfolio will delete corresponding projects."
+          cleanUp={setPortfolios}
         />
       )}
     </>
@@ -258,13 +258,13 @@ function TableLoad() {
     ));
 }
 
-Services.propTypes = {};
-ServiceTable.propTypes = {
-  setServices: PropTypes.func,
+Portfolio.propTypes = {};
+PortfolioTable.propTypes = {
+  setPortfolios: PropTypes.func,
   tableLoad: PropTypes.bool,
-  services: PropTypes.array,
+  portfolios: PropTypes.array,
 };
 Header.propTypes = {
-  services: PropTypes.array,
-  setServices: PropTypes.func,
+  portfolios: PropTypes.array,
+  setPortfolios: PropTypes.func,
 };
