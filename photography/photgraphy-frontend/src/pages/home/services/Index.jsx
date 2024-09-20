@@ -3,26 +3,11 @@ import { Helmet } from "react-helmet";
 
 import Header from "../../../components/layouts/home/Header";
 import Footer from "../../../components/layouts/Footer";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { scroller } from "react-scroll";
 
 import ServiceSection from "./ServiceSection";
 import Action from "../../../components/Action";
 
 export default function Services() {
-  const location = useLocation();
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    if (searchParams.has("waitlist")) {
-      scroller.scrollTo("waitlist", {
-        duration: 800,
-        delay: 0,
-        smooth: "easeInOutQuart",
-      });
-    }
-  }, [location]);
   return (
     <Box>
       <Helmet>

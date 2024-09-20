@@ -14,6 +14,9 @@ import { ToastContainer } from "react-toastify";
 import { notify } from "../../../utils/Index";
 import Input from "../../Input";
 import { Form, Formik } from "formik";
+import { useSelector } from "react-redux";
+import SuccessModal from "../others/SuccessModal";
+import ErrorModal from "../others/ErrorModal";
 
 const style = {
   position: "absolute",
@@ -30,38 +33,83 @@ const style = {
   p: 4,
 };
 
-export default function EditServiceModal({ open, setOpen, setServices, selectedService }) {
+export default function EditServiceModal({ open, setOpen, setServices, selectedService, services }) {
   const initialValues = {
-    service: "",
+    name: selectedService.name ?? "",
   };
 
   const validation = Yup.object({
-    service: Yup.string().required("Required"),
+    name: Yup.string().required("Required"),
   });
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const [creating, setCreating] = useState(false);
+  // Access Redux tokens
+  const accessToken = useSelector((state) => state.user.accessToken);
+  const refreshToken = useSelector((state) => state.user.refreshToken);
 
-  const handleUpdate = async (e) => {
-    e.preventDefault(true);
-    if (!initialValues?.service) {
-      notify("Please fill all input fields", "error");
-      return false;
-    }
-    setCreating(true);
+    const [successModal, setSuccessModal] = useState(false);
+    const [errorModal, setErrorModal] = useState(false);
+    const [message, setMessage] = useState("");
+
+   const handleSuccess = (message) => {
+     setMessage(message);
+     setSuccessModal(true);
+   };
+
+   const handleError = (message) => {
+     setMessage(message);
+     setErrorModal(true);
+   };
+
+  const handleUpdate = async (values, actions) => {
     try {
+      const response = await axios.put(
+        `/api/services/${selectedService?._id}`,
+        values,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      // On success, update services state and close modal
+      const { service } = response.data;
+
+      // Update the services state by replacing the updated service in the array
+      const updatedServices = services?.map((s) =>
+        s._id === service._id ? service : s
+      );
+
+      setServices(updatedServices);
+       handleSuccess(
+         response.data.message || "You have successfully deleted this data"
+       );
+      setOpen(false);
     } catch (error) {
-      console.error("Error saving editing:", error);
-      setCreating(false);
+      console.error("Error updating service:", error);
+       handleError(
+        error.response?.data?.message || "An error occurred. Please try again"
+      );
+    } finally {
+      actions.setSubmitting(false);
     }
   };
+
 
   return (
     <>
       <ToastContainer />
+      <SuccessModal
+        message={message}
+        open={successModal}
+        setOpen={setSuccessModal}
+      />
+      <ErrorModal message={message} open={errorModal} setOpen={setErrorModal} />
       <Modal
         open={open}
         onClose={handleClose}
@@ -109,8 +157,12 @@ export default function EditServiceModal({ open, setOpen, setServices, selectedS
                       </Grid2>
                     ))}
                   </Grid2>
-                  
-                      <Stack spacing={2} direction="row" justifyContent="space-between">
+
+                  <Stack
+                    spacing={2}
+                    direction="row"
+                    justifyContent="space-between"
+                  >
                     <Button
                       variant="outlined"
                       onClick={handleClose}
@@ -118,16 +170,15 @@ export default function EditServiceModal({ open, setOpen, setServices, selectedS
                     >
                       Cancel
                     </Button>
-                      <Button
-                        type="submit"
-                        loading={isSubmitting}
-                        variant="contained"
-                        sx={{ ml: "auto" }}
-                      >
-                        <span style={{ color: "#000" }}>Update</span>
-                      </Button>
-                    </Stack>
-                  
+                    <Button
+                      type="submit"
+                      loading={isSubmitting}
+                      variant="contained"
+                      sx={{ ml: "auto" }}
+                    >
+                      <span style={{ color: "#000" }}>Update</span>
+                    </Button>
+                  </Stack>
                 </Stack>
               </Form>
             )}

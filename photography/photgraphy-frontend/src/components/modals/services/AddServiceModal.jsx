@@ -9,6 +9,8 @@ import { notify } from "../../../utils/Index";
 import Input from "../../Input";
 import { Form, Formik } from "formik";
 import { useSelector } from "react-redux";
+import SuccessModal from "../others/SuccessModal";
+import ErrorModal from "../others/ErrorModal";
 
 const style = {
   position: "absolute",
@@ -39,6 +41,10 @@ export default function AddServiceModal({
   const accessToken = useSelector((state) => state.user.accessToken);
   const refreshToken = useSelector((state) => state.user.refreshToken);
 
+  const [successModal, setSuccessModal] = useState(false);
+  const [errorModal, setErrorModal] = useState(false);
+  const [message, setMessage] = useState("");
+
   const validation = Yup.object({
     name: Yup.string().required("Required"),
   });
@@ -47,32 +53,51 @@ export default function AddServiceModal({
     setOpen(false);
   };
 
- const handleUpdate = async (values, actions) => {
-   try {
-     const response = await axios.post("/api/services", values, {
-       headers: {
-         "Content-Type": "application/json",
-         Authorization: `Bearer ${accessToken}`, 
-       },
-     });
+  const handleSuccess = (message) => {
+    setMessage(message);
+    setSuccessModal(true);
+  };
 
-     // On success, update services state and close modal
-     const { services } = response.data;
-     setServices(services);
-     notify("Service added successfully!", "success");
-     setOpen(false);
-   } catch (error) {
-     console.error("Error adding service:", error);
-     notify(error.response.data.message || "Error occurred", "error");
-   } finally {
-     actions.setSubmitting(false);
-   }
- };
+  const handleError = (message) => {
+    setMessage(message);
+    setErrorModal(true);
+  };
 
+  const handleUpdate = async (values, actions) => {
+    try {
+      const response = await axios.post("/api/services", values, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // On success, update services state and close modal
+      const { service } = response.data;
+      setServices((prev) => [...prev, service]);
+      handleSuccess(
+        response.data.message || "You have successfully deleted this data"
+      );
+      setOpen(false);
+    } catch (error) {
+      console.error("Error adding service:", error);
+      handleError(
+        error.response?.data?.message || "An error occurred. Please try again"
+      );
+    } finally {
+      actions.setSubmitting(false);
+    }
+  };
 
   return (
     <>
       <ToastContainer />
+      <SuccessModal
+        message={message}
+        open={successModal}
+        setOpen={setSuccessModal}
+      />
+      <ErrorModal message={message} open={errorModal} setOpen={setErrorModal} />
       <Modal
         open={open}
         onClose={handleClose}

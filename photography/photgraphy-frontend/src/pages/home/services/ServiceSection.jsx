@@ -1,21 +1,15 @@
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Tab,
-  Tabs,
-} from "@mui/material";
+import { Box, Skeleton, Stack, TableCell, TableRow } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Text from "../../../components/Text";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import PropTypes from "prop-types";
 import Image from "../../../components/Image";
-import { Check, Verified } from "@mui/icons-material";
+import axios from "../../../api/axios";
 import Button from "../../../components/Button";
+import { useSelector } from "react-redux";
+import { Verified } from "@mui/icons-material";
+import PropTypes from "prop-types";
 
 export default function ServiceSection() {
   const controls = useAnimation();
@@ -28,6 +22,27 @@ export default function ServiceSection() {
       transition: { duration: 1.0 },
     });
   }
+
+  const [services, setServices] = useState([]);
+  const [serviceLoad, setServiceLoad] = useState(true);
+
+  const accessToken = useSelector((state) => state.user.accessToken);
+  const refreshToken = useSelector((state) => state.user.refreshToken);
+
+  useEffect(() => {
+    axios
+      .get("/api/services", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setServices(response.data.services);
+        setServiceLoad(false);
+      });
+  }, [accessToken]);
 
   return (
     <>
@@ -51,7 +66,7 @@ export default function ServiceSection() {
           animate={controls}
         >
           <ServiceHeader />
-          <Service />
+          {!serviceLoad ? <Service services={services} /> : <ServiceLoad />}
         </Grid>
       </Box>
       {/* <PricingSection /> */}
@@ -94,30 +109,30 @@ function PricingHeader() {
   );
 }
 
-function Service() {
-  const services = [
-    {
-      imageUrl: "svgs/outdoor.png",
-      title: "Outdoor Photography",
-      description:
-        "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
-    },
-    {
-      imageUrl: "svgs/studio.png",
-      title: "Studio Session Photography",
-      description:
-        "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
-    },
-    {
-      imageUrl: "svgs/wedding.png",
-      title: "Wedding Photography",
-      description:
-        "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
-    },
-  ];
+function Service({services}) {
+  // const services = [
+  //   {
+  //     imageUrl: "svgs/outdoor.png",
+  //     title: "Outdoor Photography",
+  //     description:
+  //       "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
+  //   },
+  //   {
+  //     imageUrl: "svgs/studio.png",
+  //     title: "Studio Session Photography",
+  //     description:
+  //       "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
+  //   },
+  //   {
+  //     imageUrl: "svgs/wedding.png",
+  //     title: "Wedding Photography",
+  //     description:
+  //       "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
+  //   },
+  // ];
   return (
     <Grid container spacing={3} mt={4}>
-      {services.map(({ imageUrl, title, description }, index) => (
+      {services?.map(({ name }, index) => (
         <Grid size={{ md: 4, xs: 12 }} key={index}>
           <Box
             height="160px"
@@ -130,14 +145,11 @@ function Service() {
                 "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
             }}
           >
-            <Box display="flex" justifyContent="flex-start">
-              <Image src={imageUrl} sx={{ width: "24%" }} />
+            <Box display="flex" justifyContent="center">
+              <Image src={`svgs/studio.png`} sx={{ width: "40%" }} />
             </Box>
-            <Text sx={{ textAlign: "left" }} fs="24px" fw="700" color="#fff">
-              {title}
-            </Text>
-            <Text sx={{ textAlign: "left" }} fs="12px" fw="400" color="gray">
-              {description}
+            <Text sx={{ textAlign: "center" }} fs="24px" fw="700" color="#fff">
+              {name}
             </Text>
           </Box>
         </Grid>
@@ -260,4 +272,27 @@ function PricingSection() {
       </Grid>
     </Box>
   );
+}
+
+function ServiceLoad() {
+  return (
+    <Stack direction="row" spacing={2} mt={4}>
+      {Array(3)
+        .fill()
+        .map((_index) => (
+          <Skeleton
+            key={_index}
+            variant="rounded"
+            sx={{ bgcolor: "gray" }}
+            width="100%"
+            height={200}
+          />
+        ))}
+    </Stack>
+  );
+}
+
+
+Service.propType = {
+  services : PropTypes.array
 }

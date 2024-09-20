@@ -1,15 +1,14 @@
-import { Box, Modal, Stack, Grid2 } from "@mui/material";
-import * as Yup from "yup";
+import { Box, Modal, Stack } from "@mui/material";
 import { useState } from "react";
 import Button from "../../Button";
 import PropTypes from "prop-types";
-import axios from "../../../api/axios";
 
 import { ToastContainer } from "react-toastify";
-import { notify } from "../../../utils/Index";
-import Input from "../../Input";
-import { Form, Formik } from "formik";
 import Text from "../../Text";
+import axios from "../../../api/axios";
+import { useSelector } from "react-redux";
+import SuccessModal from "./SuccessModal";
+import ErrorModal from "./ErrorModal";
 
 const style = {
   position: "absolute",
@@ -24,24 +23,78 @@ const style = {
   border: "1px solid gray",
   borderRadius: "18px",
   p: 4,
-  justifyContent: 'center', alignItems:'center', gap:2
+  justifyContent: "center",
+  alignItems: "center",
+  gap: 2,
 };
 
 export default function DeleteModal({
   open,
   setOpen,
   route,
-  delId,
   description,
+  cleanUp,
+  delId,
 }) {
   const [deleting, setDeleting] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
+  const [errorModal, setErrorModal] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const accessToken = useSelector((state) => state.user.accessToken);
+
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSuccess = (message) => {
+    setMessage(message);
+    setSuccessModal(true);
+  };
+
+  const handleError = (message) => {
+    setMessage(message);
+    setErrorModal(true);
+  };
+
+  const handleDelete = () => {
+    setDeleting(true);
+    axios
+      .delete(route, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        cleanUp((prevServices) =>
+          prevServices.filter((service) => service._id !== delId)
+        );
+        handleClose(); // Close DeleteModal first
+        handleSuccess(
+          response.data.message || "You have successfully deleted this data"
+        );
+      })
+      .catch((error) => {
+        handleClose(); // Close DeleteModal first
+        handleError(
+          error.response?.data?.message || "An error occurred. Please try again"
+        );
+      })
+      .finally(() => {
+        setDeleting(false);
+      });
   };
 
   return (
     <>
       <ToastContainer />
+      <SuccessModal
+        message={message}
+        open={successModal}
+        setOpen={setSuccessModal}
+      />
+      <ErrorModal message={message} open={errorModal} setOpen={setErrorModal} />
       <Modal
         open={open}
         onClose={handleClose}
@@ -49,25 +102,38 @@ export default function DeleteModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Box component="img" src="/icons/delete_icon.gif" sx={{   height:'100px' }} />
-          <Header description={description} delId={delId} />
-          <Action delId={delId} handleClose={handleClose} deleting={deleting} />
+          <Box
+            component="img"
+            src="/icons/delete_icon.gif"
+            sx={{ height: "100px" }}
+          />
+          <Header description={description} />
+          <Action
+            handleDelete={handleDelete}
+            handleClose={handleClose}
+            deleting={deleting}
+          />
         </Box>
       </Modal>
     </>
   );
 }
 
-function Header({ description, delId }) {
-  const [addService, setAddService] = useState(false);
+function Header({ description }) {
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Box>
-          <Text sx={{ textAlign:'center' }} fs="32px" fw="900" ff="Helvetica Neue" color="#fff">
+          <Text
+            sx={{ textAlign: "center" }}
+            fs="32px"
+            fw="900"
+            ff="Helvetica Neue"
+            color="#fff"
+          >
             Delete Item!
           </Text>
-          <Text sx={{ textAlign:'center' }} fs="16px" fw="300" color="#ccc">
+          <Text sx={{ textAlign: "center" }} fs="16px" fw="300" color="#ccc">
             {description}
           </Text>
         </Box>
@@ -76,37 +142,36 @@ function Header({ description, delId }) {
   );
 }
 
-function Action({ delId, handleClose, deleting }) {
+function Action({ handleDelete, handleClose, deleting }) {
   return (
+    <>
       <Stack spacing={2} direction="row">
-      <Button variant="outlined" onClick={handleClose} color="#2ddb81">
-        Cancel
-      </Button>
-        <Button
-          type="submit"
-          loading={deleting}
-          variant="contained"
-        >
-          <span style={{ color: "#000" }}>Confirm</span>
+        <Button variant="outlined" onClick={handleClose} color="#2ddb81">
+          Cancel
+        </Button>
+        <Button onClick={handleDelete} loading={deleting} variant="contained">
+          <span style={{ color: "#000", display: deleting ? "none" : "flex" }}>
+            Confirm
+          </span>
         </Button>
       </Stack>
-    
+    </>
   );
 }
 
 DeleteModal.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
+  cleanUp: PropTypes.func,
   route: PropTypes.string,
   description: PropTypes.string,
   delId: PropTypes.string,
 };
 Header.propTypes = {
   description: PropTypes.string,
-  delId: PropTypes.string,
 };
 Action.propTypes = {
-  delId: PropTypes.string,
+  handleDelete: PropTypes.func,
   handleClose: PropTypes.func,
   deleting: PropTypes.bool,
 };

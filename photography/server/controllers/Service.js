@@ -27,7 +27,7 @@ export const addService = async (req, res, next) => {
 };
 
 export const getServices = (req, res, next) => {
-    console.log("services");
+  console.log("services");
   Service.find()
     .then((services) => {
       res.status(200).json({ services, message: "Fetched all services" });
@@ -45,16 +45,29 @@ export const getService = (req, res, next) => {
     .catch((error) => next(new Error(error.stack)));
 };
 
-export const updateService = (req, res, next) => {
-  const { name } = req.body;
-  Service.findOneAndUpdate({ _id: req.params.serviceId })
-    .then({ name }, { new: true })
-    .then((service) =>
-      res
-        .status(200)
-        .json({ service, message: "Service Name Updated Successfully" })
-    )
-    .catch((error) => next(new Error(error.stack)));
+export const updateService = async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    //   check duplicate service
+    const duplicateService = await Service.findOne({
+      name: { $regex: new RegExp("^" + name + "$", "i") },
+    });
+    if (duplicateService) {
+      errorHandling("400|Service name already exists.|");
+    }
+
+    const service = await Service.findOneAndUpdate(
+      { _id: req.params.serviceId },
+      { name: name },
+      { new: true }
+    );
+
+    res
+      .status(200)
+      .json({ service, message: "Service Name Updated Successfully" });
+  } catch (error) {
+    next(new Error(error.stack));
+  }
 };
 
 export const deleteService = async (req, res, next) => {
@@ -66,7 +79,7 @@ export const deleteService = async (req, res, next) => {
 
     await Project.deleteMany({ _id: { $in: service.projects } });
 
-    await Service.findOneAndDelete($serviceId);
+    await Service.findOneAndDelete(serviceId);
 
     res.status(200).json({
       message: "Service and associated projects deleted successfully'",

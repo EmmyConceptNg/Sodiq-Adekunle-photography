@@ -15,7 +15,8 @@ import AddServiceModal from "../../../components/modals/services/AddServiceModal
 import EditServiceModal from "../../../components/modals/services/EditServiceModal";
 import DeleteModal from "../../../components/modals/others/DeleteModal";
 import { useSelector } from "react-redux";
-import axios from '../../../api/axios'
+import axios from "../../../api/axios";
+import EmptyState from "../../../components/EmptyState";
 
 export default function Services(props) {
   const [services, setServices] = useState([]);
@@ -69,7 +70,7 @@ function Header({ services, setServices }) {
           height="45px"
           onClick={() => setAddService(true)}
         >
-          <span style={{ color : '#000' }}>Add Service</span>
+          <span style={{ color: "#000" }}>Add Service</span>
         </Button>
       </Stack>
       <AddServiceModal
@@ -98,21 +99,6 @@ function ServiceTable({ setServices, tableLoad, services }) {
   };
   return (
     <>
-      <EditServiceModal
-        open={editService}
-        setOpen={setEditService}
-        selectedService={selectedService}
-        setServices={setServices}
-      />
-      {delId != "" && deleteService && (
-        <DeleteModal
-          open={deleteService}
-          setOpen={setDeleteService}
-          delId={delId}
-          route=""
-          description="You about to delete this service. Please note that deleting this service will delete corresponding projects."
-        />
-      )}
       <TableContainer
         component={Paper}
         sx={{
@@ -149,99 +135,127 @@ function ServiceTable({ setServices, tableLoad, services }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tableLoad
-              ? Array(5)
-                  .fill()
-                  .map((index) => (
-                    <TableRow
-                      key={index}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                        bgcolor: index % 2 === 0 ? "#1d1f21" : "#282a2d",
-                      }}
-                    >
-                      {Array(3)
-                        .fill()
-                        .map((_index) => (
-                          <TableCell
-                            key={_index}
-                            sx={{
-                              color: "#fff",
-                              fontSize: "18px",
-                              borderBottom: "none",
-                            }} // Remove bottom border
-                            component="th"
-                            scope="row"
-                          >
-                            <Skeleton
-                              variant="rounded"
-                              sx={{ bgcolor: "gray" }}
-                              width="100%"
-                              height={30}
-                            />
-                          </TableCell>
-                        ))}
-                    </TableRow>
-                  ))
-              : services.map((row, index) => (
-                  <TableRow
-                    key={row.name}
+            {tableLoad ? (
+              <TableLoad />
+            ) : (
+              services?.map((row, index) => (
+                <TableRow
+                  key={row.name}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    bgcolor: index % 2 === 0 ? "#1d1f21" : "#282a2d",
+                  }}
+                >
+                  <TableCell
                     sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                      bgcolor: index % 2 === 0 ? "#1d1f21" : "#282a2d",
-                    }}
+                      color: "#fff",
+                      fontSize: "18px",
+                      borderBottom: "none",
+                    }} // Remove bottom border
+                    component="th"
+                    scope="row"
                   >
-                    <TableCell
-                      sx={{
-                        color: "#fff",
-                        fontSize: "18px",
-                        borderBottom: "none",
-                      }} // Remove bottom border
-                      component="th"
-                      scope="row"
+                    {index + 1}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      color: "#fff",
+                      fontSize: "18px",
+                      borderBottom: "none",
+                      textAlign: "center",
+                    }} // Remove bottom border
+                  >
+                    {row.name}
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{
+                      color: "#fff",
+                      fontSize: "18px",
+                      borderBottom: "none",
+                    }} // Remove bottom border
+                    component="th"
+                    scope="row"
+                  >
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="flex-end"
                     >
-                      {index + 1}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        color: "#fff",
-                        fontSize: "18px",
-                        borderBottom: "none",
-                        textAlign: "center",
-                      }} // Remove bottom border
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={{
-                        color: "#fff",
-                        fontSize: "18px",
-                        borderBottom: "none",
-                      }} // Remove bottom border
-                      component="th"
-                      scope="row"
-                    >
-                      <Stack
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="flex-end"
-                      >
-                        <IconButton onClick={() => handleEdit(row)}>
-                          <Edit color="info" />
-                        </IconButton>
-                        <IconButton onClick={() => handleDelete(row.id)}>
-                          <DeleteForever color="error" />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      <IconButton onClick={() => handleEdit(row)}>
+                        <Edit color="info" />
+                      </IconButton>
+                      <IconButton onClick={() => handleDelete(row._id)}>
+                        <DeleteForever color="error" />
+                      </IconButton>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
+        {!tableLoad && !services?.length > 0 && (
+         <Box mt={4}>
+          <EmptyState message="You have not added any service." button="Add Service" />
+         </Box>
+        )}
       </TableContainer>
+      <EditServiceModal
+        open={editService}
+        setOpen={setEditService}
+        selectedService={selectedService}
+        setServices={setServices}
+        services={services}
+      />
+      {delId != "" && (
+        <DeleteModal
+          open={deleteService}
+          setOpen={setDeleteService}
+          delId={delId}
+          route={`/api/services/${delId}`}
+          description="You about to delete this service. Please note that deleting this service will delete corresponding projects."
+          cleanUp={setServices}
+        />
+      )}
     </>
   );
+}
+
+function TableLoad() {
+  return Array(5)
+    .fill()
+    .map((index) => (
+      <TableRow
+        key={index}
+        sx={{
+          "&:last-child td, &:last-child th": { border: 0 },
+          bgcolor: index % 2 === 0 ? "#1d1f21" : "#282a2d",
+        }}
+      >
+        {Array(3)
+          .fill()
+          .map((_index) => (
+            <TableCell
+              key={_index}
+              sx={{
+                color: "#fff",
+                fontSize: "18px",
+                borderBottom: "none",
+              }} // Remove bottom border
+              component="th"
+              scope="row"
+            >
+              <Skeleton
+                variant="rounded"
+                sx={{ bgcolor: "gray" }}
+                width="100%"
+                height={30}
+              />
+            </TableCell>
+          ))}
+      </TableRow>
+    ));
 }
 
 Services.propTypes = {};
