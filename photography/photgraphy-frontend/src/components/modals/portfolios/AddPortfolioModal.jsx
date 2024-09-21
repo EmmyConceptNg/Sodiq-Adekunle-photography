@@ -1,4 +1,12 @@
-import { Box, Modal, Stack, Grid, Grid2, IconButton, Divider } from "@mui/material";
+import {
+  Box,
+  Modal,
+  Stack,
+  Grid,
+  Grid2,
+  IconButton,
+  Divider,
+} from "@mui/material";
 import * as Yup from "yup";
 import { useState } from "react";
 import Button from "../../Button";
@@ -12,7 +20,7 @@ import { useSelector } from "react-redux";
 import SuccessModal from "../others/SuccessModal";
 import ErrorModal from "../others/ErrorModal";
 import Text from "../../Text";
-import { Cancel, Upload } from "@mui/icons-material";
+import { Cancel, Upload, Delete } from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -27,18 +35,16 @@ const style = {
   border: "1px solid gray",
   borderRadius: "18px",
   p: 4,
-  maxHeight: "90vh", // Ensure the modal doesn't exceed the viewport height
-  overflow: "hidden", // Hide overflow
+  maxHeight: "90vh",
+  overflow: "hidden",
 };
 
-
-
 const scrollableContainerStyle = {
-  overflowY: "auto", // Enable vertical scrolling
-  paddingRight: "16px", // Ensure padding for scrollbar space
-  overflowX: "hidden", // Disable horizontal scrolling
-  height: "auto", // Adjust height automatically
-  maxHeight: "calc(90vh - 80px)", // Account for padding and other elements
+  overflowY: "auto",
+  paddingRight: "16px",
+  overflowX: "hidden",
+  height: "auto",
+  maxHeight: "calc(90vh - 80px)",
 };
 
 const imageUploadBoxStyle = {
@@ -97,27 +103,27 @@ export default function AddPortfolioModal({
 
   const handleUpdate = async (values, actions) => {
     try {
-       const formData = new FormData();
-       formData.append("service", values.service);
-       formData.append("name", values.name);
-       formData.append("client", values.client);
-       formData.append("date", values.date);
-       formData.append("description", values.description);
-       files.forEach((file) => {
-         formData.append("images", file);
-       });
+      const formData = new FormData();
+      formData.append("service", values.service);
+      formData.append("name", values.name);
+      formData.append("client", values.client);
+      formData.append("date", values.date);
+      formData.append("description", values.description);
+      files.forEach((file) => {
+        formData.append("images", file);
+      });
+
       const response = await axios.post("/api/portfolios", formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data", // Don't specify a boundary
           Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      // On success, update portfolios state and close modal
       const { portfolio } = response.data;
       setPortfolios((prev) => [...prev, portfolio]);
       handleSuccess(
-        response.data.message || "You have successfully deleted this data"
+        response.data.message || "You have successfully added the portfolio"
       );
       setOpen(false);
     } catch (error) {
@@ -130,8 +136,6 @@ export default function AddPortfolioModal({
     }
   };
 
-
-
   const handleFileChange = (event) => {
     setFiles(Array.from(event.target.files));
   };
@@ -140,7 +144,9 @@ export default function AddPortfolioModal({
     document.getElementById("fileInput").click();
   };
 
-
+  const removeFile = (index) => {
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
 
   return (
     <>
@@ -258,12 +264,27 @@ export default function AddPortfolioModal({
                       </Box>
                       <Grid2 container spacing={2} mt={2}>
                         {files.map((file, index) => (
-                          <Grid2 size={{ xs:4 }} key={index}>
-                            <img
-                              src={URL.createObjectURL(file)}
-                              alt={`Uploaded ${index}`}
-                              style={{ width: "100%", height: "auto" }}
-                            />
+                          <Grid2 size={{ xs: 4 }} key={index}>
+                            <Box position="relative">
+                              <img
+                                src={URL.createObjectURL(file)}
+                                alt={`Uploaded ${index}`}
+                                style={{ width: "100%", height: "auto" }}
+                              />
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  position: "absolute",
+                                  top: 5,
+                                  right: 5,
+                                  backgroundColor: "rgba(0, 0, 0, 0.6)",
+                                  color: "#fff",
+                                }}
+                                onClick={() => removeFile(index)}
+                              >
+                                <Delete />
+                              </IconButton>
+                            </Box>
                           </Grid2>
                         ))}
                       </Grid2>

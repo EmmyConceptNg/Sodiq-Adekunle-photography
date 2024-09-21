@@ -23,27 +23,6 @@ export default function ServiceSection() {
     });
   }
 
-  const [services, setServices] = useState([]);
-  const [serviceLoad, setServiceLoad] = useState(true);
-
-  const accessToken = useSelector((state) => state.user.accessToken);
-  const refreshToken = useSelector((state) => state.user.refreshToken);
-
-  useEffect(() => {
-    axios
-      .get("/api/services", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setServices(response.data.services);
-        setServiceLoad(false);
-      });
-  }, [accessToken]);
-
   return (
     <>
       <Box sx={{ mx: { md: "200px", xs: "20px" }, mt: 5 }} ref={ref}>
@@ -66,7 +45,7 @@ export default function ServiceSection() {
           animate={controls}
         >
           <ServiceHeader />
-          {!serviceLoad ? <Service services={services} /> : <ServiceLoad />}
+          {<Service />}
         </Grid>
       </Box>
       {/* <PricingSection /> */}
@@ -109,30 +88,30 @@ function PricingHeader() {
   );
 }
 
-function Service({services}) {
-  // const services = [
-  //   {
-  //     imageUrl: "svgs/outdoor.png",
-  //     title: "Outdoor Photography",
-  //     description:
-  //       "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
-  //   },
-  //   {
-  //     imageUrl: "svgs/studio.png",
-  //     title: "Studio Session Photography",
-  //     description:
-  //       "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
-  //   },
-  //   {
-  //     imageUrl: "svgs/wedding.png",
-  //     title: "Wedding Photography",
-  //     description:
-  //       "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
-  //   },
-  // ];
+function Service() {
+  const services = [
+    {
+      imageUrl: "svgs/outdoor.png",
+      title: "Portraits",
+      description:
+        "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
+    },
+    {
+      imageUrl: "svgs/studio.png",
+      title: "Maternity",
+      description:
+        "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
+    },
+    {
+      imageUrl: "svgs/wedding.png",
+      title: "Wedding",
+      description:
+        "lorem Ipsum dolor sit amet, consectetur adipiscing elit sed do eius maxim",
+    },
+  ];
   return (
     <Grid container spacing={3} mt={4}>
-      {services?.map(({ name }, index) => (
+      {services?.map(({ title, description, imageUrl }, index) => (
         <Grid size={{ md: 4, xs: 12 }} key={index}>
           <Box
             height="160px"
@@ -146,10 +125,13 @@ function Service({services}) {
             }}
           >
             <Box display="flex" justifyContent="center">
-              <Image src={`svgs/studio.png`} sx={{ width: "40%" }} />
+              <Image src={imageUrl} sx={{ width: "20%" }} />
             </Box>
             <Text sx={{ textAlign: "center" }} fs="24px" fw="700" color="#fff">
-              {name}
+              {title}
+            </Text>
+            <Text sx={{ textAlign: "center" }} fs="12px" fw="400" color="#fff">
+              {description}
             </Text>
           </Box>
         </Grid>

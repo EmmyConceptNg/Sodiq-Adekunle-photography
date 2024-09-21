@@ -8,7 +8,8 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
 import Action from "../../../components/Action";
-import Projects from "../../../components/projects/Index";
+import Projects from "../portfolio/Index";
+
 
 
 export default function Home() {
@@ -27,7 +28,7 @@ export default function Home() {
   return (
     <Box>
       <Helmet>
-        <title>Home</title>
+        <title>Adekunle Sodiq Photography - Home</title>
       </Helmet>
       <Box>
         <Box width="100%" height="100vh" pt={2}>

@@ -46,7 +46,7 @@ Text.propTypes = {
   cursor: PropTypes.string,
   fw: PropTypes.string.isRequired,
   ff: PropTypes.string,
-  fs: PropTypes.string.isRequired,
+  fs: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   color: PropTypes.string,
   to: PropTypes.string,
   text: PropTypes.string,

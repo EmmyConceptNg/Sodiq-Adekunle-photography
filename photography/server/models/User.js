@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const UserSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
+  about: String,
   phone: Number,
   email: {
     type: String,
@@ -19,10 +20,15 @@ const UserSchema = mongoose.Schema({
   linkedIn: String,
   facebook: String,
   image: String,
+   role: {
+    type: String,
+    enum: ['admin', 'user'], 
+    default: 'user'
+  },
   token: {
     type: String,
   },
-});
+},{timestamps:true});
 
 const User = mongoose.model("User", UserSchema);
 

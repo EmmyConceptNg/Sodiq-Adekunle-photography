@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Stack, Box, Drawer, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PropTypes from "prop-types";
 import Button from "../../Button";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Action } from "./Header";
+import { useSelector } from "react-redux";
+import axios from '../../../api/axios'
 
 export default function NavBar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -30,11 +32,27 @@ export default function NavBar() {
     { to: "/contact", name: "Contact" },
   ];
 
-  const portfolioLinks = [
-    { to: "/portfolio/wedding", name: "Wedding" },
-    { to: "/portfolio/studio", name: "Studio Session" },
-    { to: "/portfolio/outdoor", name: "Outdoor Session" },
-  ];
+
+
+
+   const [portfolios, setPortfolios] = useState([]);
+
+   useEffect(() => {
+     axios
+       .get("/api/portfolios", {
+         headers: {
+           "Content-Type": "application/json",
+         },
+       })
+       .then((response) => {
+         console.log(response.data);
+         setPortfolios(response.data.portfolios);
+       });
+   }, []);
+
+
+
+
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -115,11 +133,11 @@ export default function NavBar() {
                   },
                 }}
               >
-                {portfolioLinks.map((link, idx) => (
+                {portfolios.map((link) => (
                   <MenuItem
-                    key={idx}
+                    key={link._id}
                     onClick={() => {
-                      navigate(link.to);
+                      navigate(`/portfolio/${link._id}`);
                       handleMenuClose();
                     }}
                     sx={{
@@ -201,11 +219,11 @@ export default function NavBar() {
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                 >
-                  {portfolioLinks.map((link, idx) => (
+                  {portfolios.map((link) => (
                     <MenuItem
-                      key={idx}
+                      key={link._id}
                       onClick={() => {
-                        navigate(link.to);
+                        navigate(`/portfolio/${link._id}`);
                         handleMenuClose();
                       }}
                     >

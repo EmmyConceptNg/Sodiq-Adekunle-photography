@@ -1,4 +1,7 @@
 import axios from "axios";
+import { store } from "../redux/Store"; 
+import { clearUser } from "../redux/UserReducer";
+
 
 let baseURL = "";
 
@@ -13,7 +16,7 @@ const instance = axios.create({
 });
 
 export const getImageUrl = (imagePath) => {
-  return `${baseURL}/images/${imagePath}`;
+  return `${baseURL}/${imagePath}`;
 };
 
 // Add request interceptor to include access token in headers
@@ -28,8 +31,7 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-
-// Add response interceptor to handle token refresh
+// Add response interceptor to handle token refresh and redirection
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -59,9 +61,26 @@ instance.interceptors.response.use(
           return instance(originalRequest);
         } catch (refreshError) {
           console.log("Refresh token expired. Please login again.");
+          // Dispatch clearUser action and redirect to login
+          store.dispatch(clearUser());
+          window.location.href = "/login";
         }
+      } else {
+        console.log("No refresh token available. Please login.");
+        // Dispatch clearUser action and redirect to login
+        store.dispatch(clearUser());
+        window.location.href = "/login";
       }
     }
+
+    // If the error is a 401 and it's after retrying, redirect to login
+    if (error.response && error.response.status === 401) {
+      console.log("Unauthorized. Redirecting to login.");
+      // Dispatch clearUser action and redirect to login
+      store.dispatch(clearUser());
+      window.location.href = "/login";
+    }
+
     return Promise.reject(error);
   }
 );

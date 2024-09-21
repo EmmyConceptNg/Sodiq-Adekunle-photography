@@ -3,13 +3,19 @@ import Text from "../../../components/Text";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import { Form, Formik } from "formik";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userDetailValidation } from "../../../utils/Index";
+import { setUser } from "../../../redux/UserReducer";
+import axios from "../../../api/axios";
+import { useState } from "react";
+import SuccessModal from "../../../components/modals/others/SuccessModal";
+import ErrorModal from "../../../components/modals/others/ErrorModal";
 
-
-export default function ProfileDetails() {
-
+export default function ProfileDetails({ handleUpdate }) {
   const user = useSelector((state) => state.user.details);
+
+
+
   const initialValues = {
     firstName: user?.firstName ?? "",
     lastName: user?.lastName ?? "",
@@ -22,13 +28,11 @@ export default function ProfileDetails() {
     address: user?.address ?? "",
   };
 
-
-  const handleUpdate =() =>{
-
-  }
+ 
 
   return (
     <>
+     
       <Header />
 
       <Box
@@ -74,6 +78,7 @@ export default function ProfileDetails() {
                       type: "email",
                       required: true,
                       name: "email",
+                      readOnly: true,
                     },
                     {
                       label: "Phone",
@@ -146,7 +151,14 @@ export default function ProfileDetails() {
                     variant="contained"
                     sx={{ ml: "auto" }}
                   >
-                    <span style={{ color: '#000' }}>Update</span>
+                    <span
+                      style={{
+                        color: "#000",
+                        display: isSubmitting ? "none" : "flex",
+                      }}
+                    >
+                      Update
+                    </span>
                   </Button>
                 </Box>
               </Form>
@@ -169,9 +181,6 @@ function Header() {
           Edit and Update Admin Profile Details
         </Text>
       </Box>
-      <Button variant="contained" height="45px">
-        <span style={{ color: "#000" }}>Edit Details</span>
-      </Button>
     </Stack>
   );
 }

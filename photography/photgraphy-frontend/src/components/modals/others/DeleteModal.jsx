@@ -67,8 +67,8 @@ export default function DeleteModal({
         },
       })
       .then((response) => {
-        cleanUp((prevServices) =>
-          prevServices.filter((service) => service._id !== delId)
+        cleanUp((prevData) =>
+          prevData.filter((data) => data._id !== delId)
         );
         handleClose(); // Close DeleteModal first
         handleSuccess(

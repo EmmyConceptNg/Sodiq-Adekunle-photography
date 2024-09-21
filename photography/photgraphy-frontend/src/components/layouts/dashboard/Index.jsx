@@ -122,7 +122,7 @@ export default function DashboardLayout() {
                 <Text
                   color="#fff"
                   fw="400"
-                  fs={{ md: "24px", xs: "24px" }}
+                  fs="24"
                   ff="Sacramento, cursive"
                 >
                   Sodiq Adekunle photography

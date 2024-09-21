@@ -11,7 +11,7 @@ export default function Services() {
   return (
     <Box>
       <Helmet>
-        <title>Works</title>
+        <title>Services</title>
       </Helmet>
       <Box>
         <Box width="100%" height="100vh" pt={2}>

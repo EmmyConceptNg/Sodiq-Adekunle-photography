@@ -43,14 +43,13 @@ export default function Nav(){
         <Box display={{ xs: "none", sm: "flex" }} alignItems="center">
           <Stack direction="row" spacing={2}>
             <Box display="flex" alignItems="center">
-              <IconButton
+              <IconButton  onClick={handleClick}
                 size="small"
                 aria-controls={open ? "account-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
               >
                 <Avatar
-                  onClick={handleClick}
                   sx={{ width: "40px", height: "40px" }}
                   src={user?.image ?? null}
                 />

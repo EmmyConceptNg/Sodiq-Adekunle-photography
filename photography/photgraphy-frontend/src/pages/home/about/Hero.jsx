@@ -8,10 +8,11 @@ import { useNavigate } from "react-router-dom";
 
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { getImageUrl } from "../../../api/axios";
 
 
 
-export default function Hero() {
+export default function Hero({ admin }) {
   const controls = useAnimation();
   const [ref, inView] = useInView();
 
@@ -31,15 +32,14 @@ export default function Hero() {
         sx={{ mx: { md: "200px", xs: "15px" }, mt: 5 }}
         ref={ref}
       >
-        <PersonalInfo />
-        <About />
+        <PersonalInfo admin={admin} />
+        <About admin={admin} />
       </Grid>
-      
     </>
   );
 }
 
-function PersonalInfo() {
+function PersonalInfo({admin}) {
   const controls = useAnimation();
   const [ref, inView] = useInView();
 
@@ -71,12 +71,16 @@ function PersonalInfo() {
       animate={controls}
       ref={ref}
     >
-      <Image src="/images/profile.png" alt="profile" />
+      <Image
+        src={admin?.image ? getImageUrl(admin?.image) : "/icons/profile.png"}
+        alt={admin?.firstName}
+        sx={{ borderRadius: "100%" }}
+      />
     </Grid>
   );
 }
 
-function About() {
+function About({admin}) {
   const navigate = useNavigate();
   const controls = useAnimation();
   const [ref, inView] = useInView();
@@ -124,33 +128,9 @@ function About() {
             color="#ccc"
             sx={{ my: 3 }}
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
-            nostrum voluptatibus ut, animi facere incidunt nemo alias rem velit
-            hic. Pariatur, voluptatum illum nobis iste veritatis delectus
-            quisquam eos totam?
+           {admin?.about}
           </Text>
-          <Text
-            fs={{ md: "18px", xs: "12px" }}
-            fw="500"
-            color="#ccc"
-            sx={{ my: 3 }}
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
-            nostrum voluptatibus ut, animi facere incidunt nemo alias rem velit
-            hic. Pariatur, voluptatum illum nobis iste veritatis delectus
-            quisquam eos totam?
-          </Text>
-          <Text
-            fs={{ md: "18px", xs: "12px" }}
-            fw="500"
-            color="#ccc"
-            sx={{ my: 3 }}
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
-            nostrum voluptatibus ut, animi facere incidunt nemo alias rem velit
-            hic. Pariatur, voluptatum illum nobis iste veritatis delectus
-            quisquam eos totam?
-          </Text>
+          
           <Button
             sx={{ mt: 3 }}
             onClick={() => navigate("/contact")}

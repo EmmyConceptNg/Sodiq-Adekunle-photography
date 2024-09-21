@@ -28,6 +28,8 @@ app.use(
   })
 );
 
+
+
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("dev"));
@@ -43,7 +45,7 @@ const __dirname = path.dirname(__filename);
 // dotenv.config({ path: envFile });
 
 // Serve static files from the "public/images" directory
-app.use("/images", express.static(path.join(__dirname, "public/images")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Log incoming requests
 app.use((req, res, next) => {

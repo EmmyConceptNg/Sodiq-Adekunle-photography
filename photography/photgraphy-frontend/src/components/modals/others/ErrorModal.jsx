@@ -68,7 +68,7 @@ function Header({ message }) {
             ff="Helvetica Neue"
             color="#fff"
           >
-           Success!
+           Error!
           </Text>
           <Text sx={{ textAlign: "center" }} fs="16px" fw="300" color="#ccc">
             {message}

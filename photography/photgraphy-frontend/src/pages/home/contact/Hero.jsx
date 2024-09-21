@@ -11,21 +11,14 @@ import { useInView } from "react-intersection-observer";
 import { Email, LocationOnSharp, Phone } from "@mui/icons-material";
 
 
-const addresses = [
-  {
-    icon: <LocationOnSharp sx={{ color: "#2ddb81" }} />,
-    name: "Our Office",
-    detail: "Lagos, Nigeria",
-    link: "",
-  },
-  { icon: <Phone  sx={{ color: "#2ddb81" }} />, name: "Contact Number", detail: "+2348138383938", link: "" },
-  { icon: <Email  sx={{ color: "#2ddb81" }} />, name: "Email Us", detail: "emmyconceptng@gmail.com", link: "" },
-];
 
 
-export default function Hero() {
+
+export default function Hero({ admin }) {
   const controls = useAnimation();
   const [ref, inView] = useInView();
+
+ 
 
   if (inView) {
     controls.start({
@@ -43,17 +36,37 @@ export default function Hero() {
         sx={{ mx: { md: "200px", xs: "15px" }, mt: 5 }}
         ref={ref}
       >
-        <Address />
+        <Address admin={admin} />
         <About />
       </Grid>
-      
     </>
   );
 }
 
-function Address() {
+function Address({admin}) {
   const controls = useAnimation();
   const [ref, inView] = useInView();
+
+   const addresses = [
+     {
+       icon: <LocationOnSharp sx={{ color: "#2ddb81" }} />,
+       name: "Our Office",
+       detail: admin?.address,
+       link: "",
+     },
+     {
+       icon: <Phone sx={{ color: "#2ddb81" }} />,
+       name: "Contact Number",
+       detail: admin?.phone,
+       link: "",
+     },
+     {
+       icon: <Email sx={{ color: "#2ddb81" }} />,
+       name: "Email Us",
+       detail: admin?.email,
+       link: "",
+     },
+   ];
 
   if (inView) {
     controls.start({

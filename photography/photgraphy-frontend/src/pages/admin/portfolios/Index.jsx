@@ -20,7 +20,7 @@ import axios from "../../../api/axios";
 import EmptyState from "../../../components/EmptyState";
 
 export default function Portfolio() {
-  const [portfolios, setPortFolios] = useState([]);
+  const [portfolios, setPortfolios] = useState([]);
   const [tableLoad, setTableLoad] = useState(true);
 
   const accessToken = useSelector((state) => state.user.accessToken);
@@ -35,16 +35,16 @@ export default function Portfolio() {
       })
       .then((response) => {
         console.log(response.data);
-        setPortFolios(response.data.portfolios);
+        setPortfolios(response.data.portfolios);
         setTableLoad(false);
       });
   }, [accessToken]);
 
   return (
     <Stack spacing={3}>
-      <Header portfolios={portfolios} setPortFolios={setPortFolios} />
+      <Header portfolios={portfolios} setPortfolios={setPortfolios} />
       <PortfolioTable
-        setPortFolios={setPortFolios}
+        setPortfolios={setPortfolios}
         tableLoad={tableLoad}
         portfolios={portfolios}
       />
@@ -77,7 +77,7 @@ function Header({ portfolios, setPortfolios }) {
         open={addPortfolio}
         setOpen={setAddPortfolio}
         portfolios={portfolios}
-        setPortFolios={setPortfolios}
+        setPortfolios={setPortfolios}
       />
     </>
   );

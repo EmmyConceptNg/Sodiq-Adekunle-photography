@@ -1,14 +1,15 @@
-import { Box, CardMedia, Stack } from "@mui/material";
+import { Box, CardMedia, Skeleton, Stack } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Text from "../../../components/Text";
 import Button from "../../../components/Button";
-import { Link } from "react-scroll";
 import Image from "../../../components/Image";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { useEffect, useState } from "react";
+import axios, { getImageUrl } from "../../../api/axios";
 
 const responsive = {
   superLargeDesktop: {
@@ -62,6 +63,21 @@ export default function Hero() {
     });
   }
 
+  const [admin, setAdmin] = useState({});
+  const [loadPage, setLoadPage] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get("/api/auth/admin-user")
+      .then((response) => {
+        setAdmin(response.data.user);
+        setLoadPage(false)
+      })
+      .catch((error) => {
+        console.log("Cant get admin user: ", error);
+      });
+  }, []);
+
   return (
     <>
       <Grid
@@ -70,15 +86,38 @@ export default function Hero() {
         sx={{ mx: { md: "200px", xs: "15px" }, mt: 5 }}
         ref={ref}
       >
-        <PersonalInfo />
-        <Slide />
+        {loadPage ? (
+          <>
+            <Grid size={{ md: 4, xs: 12 }}>
+              <Skeleton
+                variant="rounded"
+                sx={{ bgcolor: "#121214" }}
+                width="100%"
+                height={500}
+              />
+            </Grid>
+            <Grid size={{ md: 8, xs: 12 }}>
+              <Skeleton
+                variant="rounded"
+                sx={{ bgcolor: "#121214" }}
+                width="100%"
+                height={500}
+              />
+            </Grid>
+          </>
+        ) : (
+          <>
+            <PersonalInfo admin={admin} />
+            <Slide />
+          </>
+        )}
       </Grid>
       <Companies />
     </>
   );
 }
 
-function PersonalInfo() {
+function PersonalInfo({ admin }) {
   const controls = useAnimation();
   const [ref, inView] = useInView();
 
@@ -110,14 +149,18 @@ function PersonalInfo() {
       animate={controls}
       ref={ref}
     >
-      <Image src="/images/profile.png" alt="profile" />
+      <Image
+        src={admin?.image ? getImageUrl(admin?.image) : "/icons/profile.png"}
+        alt={admin?.firstName}
+        sx={{ borderRadius: "100%" }}
+      />
       <Text fs="32px" fw="900" ff="Helvetica Neue" color="#fff">
-        Emmanuel Kolawole
+        {admin?.firstName && admin?.firstName + " " + admin?.lastName}
       </Text>
       <Text fs="16px" fw="400" color="#ccc">
         I am a professional photographer.
       </Text>
-      <Socials />
+      <Socials admin={admin} />
     </Grid>
   );
 }
@@ -126,6 +169,39 @@ function Slide() {
   const navigate = useNavigate();
   const controls = useAnimation();
   const [ref, inView] = useInView();
+
+  const [displayImages, setDisplayImages] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/portfolios", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        const portfolios = response.data.portfolios;
+
+        // Extract a random image from each portfolio and merge them
+        const randomImages = portfolios
+          .map((portfolio) => {
+            const images = portfolio.images; // Assuming images is an array
+            if (images.length > 0) {
+              const randomIndex = Math.floor(Math.random() * images.length);
+              return images[randomIndex]; // Pick a random image
+            }
+            return null; // Handle empty image arrays
+          })
+          .filter((image) => image !== null); // Remove null values
+
+        // Now merge these random images with any additional images if needed
+        setDisplayImages(randomImages);
+      })
+      .catch((error) => {
+        console.error("Error fetching portfolios:", error);
+      });
+  }, []);
 
   if (inView) {
     controls.start({
@@ -162,23 +238,21 @@ function Slide() {
             autoPlaySpeed={3000}
             showDots={true}
           >
-            {Array(10)
-              .fill()
-              .map((item, index) => (
-                <CardMedia
-                  key={index}
-                  component="img"
-                  height="650"
-                  image="/svgs/banner.png"
-                  alt="wedding"
-                  sx={{
-                    border: "1px solid rgba(0,0,0,.05)",
-                    borderRadius: "20px",
-                    boxShadow:
-                      "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
-                  }}
-                />
-              ))}
+            {displayImages?.map((item, index) => (
+              <CardMedia
+                key={index}
+                component="img"
+                height="650"
+                image={getImageUrl(item)}
+                alt="Adekule Sodiq Photography"
+                sx={{
+                  border: "1px solid rgba(0,0,0,.05)",
+                  borderRadius: "20px",
+                  boxShadow:
+                    "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
+                }}
+              />
+            ))}
           </Carousel>
         </Box>
       </Stack>
@@ -248,7 +322,7 @@ function Companies() {
   );
 }
 
-function Socials() {
+function Socials({ admin }) {
   return (
     <Stack
       mt={3}
@@ -259,40 +333,44 @@ function Socials() {
     >
       {[
         {
-          to: "#",
           image: "/svgs/LinkedIn.svg",
+          name: "linkedIn",
         },
         {
-          to: "#",
           image: "/svgs/Facebook.svg",
+          name: "facebook",
         },
         {
-          to: "#",
           image: "/svgs/Twitter.svg",
+          name: "twitter",
         },
         {
-          to: "#",
           image: "/svgs/Instagram-Sm.svg",
+          name: "instagram",
         },
-      ].map((nav, index) => (
-        <Link
-          style={{
-            color: "#fff",
-            cursor: "pointer",
-          }}
-          to={nav?.to}
-          smooth={true}
-          duration={500}
-          key={index}
-        >
-          <Box display="flex">
-            {nav?.name && nav?.name}
-            {nav?.image && (
-              <Box component="img" src={nav?.image} width="20px" />
-            )}
-          </Box>
-        </Link>
-      ))}
+      ].map((nav, index) =>
+        admin[nav.name] ? (
+          <a
+            href={admin[nav.name]} // Use admin's actual URL
+            target="_blank" // Open in a new tab
+            rel="noopener noreferrer" // For security
+            key={index}
+            style={{
+              color: "#fff",
+              cursor: "pointer",
+            }}
+          >
+            <Box display="flex" alignItems="center">
+              <Box
+                component="img"
+                src={nav?.image}
+                width="20px"
+                alt={nav.name}
+              />
+            </Box>
+          </a>
+        ) : null
+      )}
     </Stack>
   );
 }

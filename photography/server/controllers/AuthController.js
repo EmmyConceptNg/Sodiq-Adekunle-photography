@@ -136,3 +136,46 @@ export const refreshToken = async (req, res, next) => {
     return res.status(403).json({ message: "Forbidden" });
   }
 };
+
+export const adminUser = (req, res, next) => {
+  User.findOne({ role: "admin" })
+    .select("-password")
+    .then((user) =>
+      res.status(200).json({ user, message: "Admin User Successfully" })
+    )
+    .catch((error) => next(new Error(error.stack)));
+};
+
+export const updateUser = (req, res, next) => {
+  const { userId } = req.params;
+
+  User.findOneAndUpdate({ _id: userId }, req.body, { new: true }).then((user) =>
+    res.status(200).json({ user, message: "User Details Updated Successfully" })
+  ).catch(error => next(new Error(error.stack)));
+};
+
+export const updateDisplayImage = async (req, res, next) => {
+  try {
+    let user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Check if a file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ message: "No image uploaded." });
+    }
+
+    // Update the user's profile image with the uploaded file's path
+    user.image = req.file.path;
+
+    await user.save();
+
+    res
+      .status(200)
+      .json({ user, message: "Display image updated successfully" });
+  } catch (error) {
+    next(new Error(error.stack));
+  }
+};

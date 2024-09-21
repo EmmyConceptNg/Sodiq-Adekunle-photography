@@ -2,7 +2,7 @@ export const MenuItems = [
   {
     id: "dashboard",
     name: "Dashboard",
-    icon: "ic:outline-home",
+    icon: "outline-home",
     link: "/admin/dashboard",
   },
   {
@@ -17,12 +17,6 @@ export const MenuItems = [
     icon: "mdi:education-outline",
     link: "/admin/education-and-experience",
   },
-  // {
-  //   id: "contacts",
-  //   name: "Contacts",
-  //   icon: "mingcute:contacts-line",
-  //   link: "/admin/contacts",
-  // },
   {
     id: "settings",
     name: "Settings",

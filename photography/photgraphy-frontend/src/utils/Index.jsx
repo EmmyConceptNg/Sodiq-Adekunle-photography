@@ -52,6 +52,9 @@ export const userDetailValidation = Yup.object({
   twitter: Yup.string().url("Invalid URL format"),
   email: Yup.string().email("Invalid email address").required("Required"),
 });
+export const aboutValidation = Yup.object({
+  about: Yup.string().required("Required"),
+});
 
 export const notify = (message, type) => {
   const notifyObject = {

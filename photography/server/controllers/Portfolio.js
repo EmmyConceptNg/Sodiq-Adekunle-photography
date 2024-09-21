@@ -1,5 +1,8 @@
 import { errorHandling } from "../middleware/errorHandler.js";
 import Portfolio from "../models/Portfolio.js";
+import path from "path";
+import fs from "fs";
+const __dirname = path.resolve();
 
 const checkDuplicateName = async (name) => {
   return false;
@@ -7,17 +10,31 @@ const checkDuplicateName = async (name) => {
 
 export const addPortfolio = async (req, res, next) => {
   try {
-    const { name } = req.body;
+    const { name, client, date, description, service } = req.body;
 
     // Case-insensitive check for duplicate portfolio name
     const duplicatePortfolio = await Portfolio.findOne({
       name: { $regex: new RegExp("^" + name + "$", "i") },
     });
+
     if (duplicatePortfolio) {
-      errorHandling("400|Portfolio name already exists.|");
+      return res
+        .status(400)
+        .json({ message: "Portfolio name already exists." });
     }
 
-    const portfolio = await Portfolio.create({ name });
+    // Collect image file paths
+    console.log("Uploaded files: ", req.files);
+    const imagePaths = req.files.map((file) => file.path);
+
+    const portfolio = await Portfolio.create({
+      name,
+      client,
+      date,
+      description,
+      service,
+      images: imagePaths,
+    });
 
     res
       .status(201)
@@ -48,24 +65,58 @@ export const getPortfolio = (req, res, next) => {
 
 export const updatePortfolio = async (req, res, next) => {
   try {
-    const { name } = req.body;
-    //   check duplicate Portfolio
+    const { name, client, date, description, service, removedImages } =
+      req.body;
+
+    // Case-insensitive check for duplicate portfolio name
     const duplicatePortfolio = await Portfolio.findOne({
       name: { $regex: new RegExp("^" + name + "$", "i") },
+      _id: { $ne: req.params.portfolioId }, // Exclude the current portfolio from the check
     });
+
     if (duplicatePortfolio) {
-      errorHandling("400|Portfolio name already exists.|");
+      return res
+        .status(400)
+        .json({ message: "Portfolio name already exists." });
     }
 
-    const portfolio = await Portfolio.findOneAndUpdate(
-      { _id: req.params.portfolioId },
-      { name: name },
-      { new: true }
+    // Find the existing portfolio
+    let portfolio = await Portfolio.findById(req.params.portfolioId);
+
+    if (!portfolio) {
+      return res.status(404).json({ message: "Portfolio not found." });
+    }
+
+    // Parse removedImages
+    const removedImagesArray = JSON.parse(removedImages || "[]");
+    removedImagesArray.forEach((imagePath) => {
+      const relativePath = imagePath.replace(`${process.env.SERVER_URL}/`, ""); // Adjust this based on your base URL
+      fs.unlink(path.join(__dirname, relativePath), (err) => {
+        if (err) console.error("Error deleting image:", err);
+      });
+    });
+
+    // Filter out removed images from the portfolio images
+    const updatedImages = portfolio.images.filter(
+      (image) => !removedImagesArray.includes(image)
     );
+
+    // Collect image file paths for new images
+    const newImagePaths = req.files.map((file) => file.path);
+
+    // Update the portfolio with new data
+    portfolio.name = name;
+    portfolio.client = client;
+    portfolio.date = date;
+    portfolio.description = description;
+    portfolio.service = service;
+    portfolio.images = [...updatedImages, ...newImagePaths];
+
+    await portfolio.save();
 
     res
       .status(200)
-      .json({ portfolio, message: "Portfolio Name Updated Successfully" });
+      .json({ portfolio, message: "Portfolio Updated Successfully" });
   } catch (error) {
     next(new Error(error.stack));
   }
@@ -80,8 +131,9 @@ export const deletePortfolio = async (req, res, next) => {
 
     await Portfolio.findOneAndDelete(portfolioId);
 
+    const portfolios = await Portfolio.find();
     res.status(200).json({
-      message: "Portfolio and associated projects deleted successfully'",
+      message: "Portfolio and associated projects deleted successfully'", portfolios
     });
   } catch (error) {
     next(new Error(error.stack));

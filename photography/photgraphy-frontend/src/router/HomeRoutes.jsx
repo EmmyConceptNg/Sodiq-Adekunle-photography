@@ -2,6 +2,7 @@ import SingleProject from "../components/projects/single-project/Index";
 import About from "../pages/home/about/Index";
 import Contact from "../pages/home/contact/Index";
 import Home from "../pages/home/landing/Index";
+import SinglePortfolio from "../pages/home/portfolio/single-portfolio/Index";
 import Services from "../pages/home/services/Index";
 import Works from "../pages/home/works/Index";
 
@@ -10,7 +11,7 @@ export const HomeRoutes = () => {
     { path: "/", element: <Home /> },
     { path: "/about", element: <About /> },
     { path: "/portfolio", element: <Works /> },
-    { path: "/portfolio/:id", element: <SingleProject /> },
+    { path: "/portfolio/:id", element: <SinglePortfolio /> },
     { path: "/service", element: <Services /> },
     { path: "/contact", element: <Contact /> },
   ];

@@ -5,8 +5,8 @@ const PortfolioSchema = mongoose.Schema({
   description: String,
   client: String,
   date: Date,
-  images: [],
-});
+  images: [String],
+},{timestamps : true});
 
 const Portfolio = mongoose.model("Portfolio", PortfolioSchema)
 
