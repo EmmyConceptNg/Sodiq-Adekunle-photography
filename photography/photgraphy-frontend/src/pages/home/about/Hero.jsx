@@ -74,7 +74,7 @@ function PersonalInfo({admin}) {
       <Image
         src={admin?.image ? getImageUrl(admin?.image) : "/icons/profile.png"}
         alt={admin?.firstName}
-        sx={{ borderRadius: "100%" }}
+        sx={{ borderRadius: "20px" }}
       />
     </Grid>
   );

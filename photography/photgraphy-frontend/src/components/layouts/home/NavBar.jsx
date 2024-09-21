@@ -111,7 +111,7 @@ export default function NavBar() {
                 sx={{
                   borderBottom: location.pathname.startsWith("/portfolio")
                     ? "2px solid #2DDB81"
-                    : "none",
+                    : "none", mx : '20px'
                 }}
                 onClick={handleMenuClick}
               >

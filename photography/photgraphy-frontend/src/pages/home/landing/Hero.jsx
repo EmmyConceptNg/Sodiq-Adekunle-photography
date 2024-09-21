@@ -85,6 +85,7 @@ export default function Hero() {
         spacing={5}
         sx={{ mx: { md: "200px", xs: "15px" }, mt: 5 }}
         ref={ref}
+        flexDirection={{ xs: "column-reverse", md: "row" }}
       >
         {loadPage ? (
           <>
@@ -133,7 +134,6 @@ function PersonalInfo({ admin }) {
     <Grid
       size={{ xs: 12, md: 4 }}
       sx={{
-        display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         bgcolor: "#121214",
@@ -142,17 +142,17 @@ function PersonalInfo({ admin }) {
         borderRadius: "20px",
         boxShadow:
           "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
-        textAlign: "center",
+        textAlign: "center", display: {xs : 'none', md : 'flex'}
       }}
       component={motion.div}
       initial={{ opacity: 0, y: 50 }}
       animate={controls}
-      ref={ref}
+      ref={ref} 
     >
       <Image
         src={admin?.image ? getImageUrl(admin?.image) : "/icons/profile.png"}
         alt={admin?.firstName}
-        sx={{ borderRadius: "100%" }}
+        sx={{ borderRadius: "20px" }}
       />
       <Text fs="32px" fw="900" ff="Helvetica Neue" color="#fff">
         {admin?.firstName && admin?.firstName + " " + admin?.lastName}
