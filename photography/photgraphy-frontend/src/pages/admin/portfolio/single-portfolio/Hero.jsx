@@ -19,7 +19,6 @@ const addresses = [
     detail: "2024",
     link: "",
   },
-  {  name: "Client", detail: "Emmy", link: "" },
   {  name: "Service", detail: "Studio Session", link: "" },
   {  name: "project", detail: "Creatice", link: "" },
 ];

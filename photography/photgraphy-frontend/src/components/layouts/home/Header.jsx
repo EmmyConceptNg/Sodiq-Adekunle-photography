@@ -24,7 +24,7 @@ const AppBarStyled = styled(AppBar)(({ theme }) => ({
 }));
 const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   width: "100%",
-  paddingLeft: 0, display: "flex", justifyContent: "space-between",
+  paddingLeft: 0, display: "flex", justifyContent: "space-between", alignItems : 'center',
   
   color: theme.palette.text.secondary,
 }));
@@ -35,20 +35,22 @@ export default function Header(props) {
     <>
       <AppBarStyled position="sticky" color="default">
         <ToolbarStyled style={{ padding: 0 }}>
-          {/* <Box
-              component="img"
-              src="/logo/Logo.svg"
-              sx={{ height: "72px" }}
-            /> */}
+          <Box
+            component="img"
+            src="/logo/sodiq-logo.png"
+            sx={{
+              height: { md: "90px", xs: "60px" },
+            }}
+          />
 
-          <Text
+          {/* <Text
             color="#fff"
             fw="400"
             fs={{ md: "24px", xs: "24px" }}
             ff="Sacramento, cursive"
           >
             Sodiq Adekunle photography
-          </Text>
+          </Text> */}
 
           <Box
             sx={{
@@ -58,7 +60,7 @@ export default function Header(props) {
           >
             <NavBar />
           </Box>
-          <Box display={{ md: 'block', xs : 'none' }}>
+          <Box display={{ md: "block", xs: "none" }}>
             <Action />
           </Box>
         </ToolbarStyled>

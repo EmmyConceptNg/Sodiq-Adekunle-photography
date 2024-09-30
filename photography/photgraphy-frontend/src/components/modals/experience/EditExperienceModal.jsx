@@ -39,22 +39,29 @@ const scrollableContainerStyle = {
   maxHeight: "calc(90vh - 80px)", // Account for padding and other elements
 };
 
-export default function AddEducationModal({
+const convertDate = (date) => {
+  if (!date) return "";
+  const d = new Date(date);
+  return d.toISOString().split("T")[0]; // Extract the date part in YYYY-MM-DD format
+};
+
+export default function EditExperienceModal({
   open,
   setOpen,
-  setEducations,
-  educations,
+  setExperiences,
+  selectedExperience,
+  experiences,
 }) {
   const initialValues = {
-    name: "",
-    course: "",
-    startDate: "",
-    endDate: "",
+    name: selectedExperience?.name || "",
+    location: selectedExperience?.location || "",
+    startDate: convertDate(selectedExperience?.startDate) || "",
+    endDate: convertDate(selectedExperience?.endDate) || "",
   };
 
   const validation = Yup.object({
     name: Yup.string().required("Required"),
-    course: Yup.string().required("Required"),
+    location: Yup.string().required("Required"),
     startDate: Yup.date().required("Required"),
     endDate: Yup.date().required("Required"),
   });
@@ -84,20 +91,24 @@ export default function AddEducationModal({
     try {
       console.log("Submitting form with values:", values); // Debugging step
 
-      const response = await axios.post("/api/educations", values, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.put(
+        `/api/experiences/${selectedExperience?._id}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
-      const { education } = response.data;
-      setEducations((prev) => [...prev, education]);
+      const { experience } = response.data;
+      setExperiences((prev) => [...prev, experience]);
       handleSuccess(
-        response.data.message || "You have successfully added the education"
+        response.data.message || "You have successfully added the experience"
       );
       setOpen(false);
     } catch (error) {
-      console.error("Error adding education:", error);
+      console.error("Error adding experience:", error);
       handleError(
         error.response?.data?.message || "An error occurred. Please try again"
       );
@@ -125,7 +136,7 @@ export default function AddEducationModal({
                 ff="Helvetica Neue"
                 color="#fff"
               >
-                Add Education
+                Add Experience
               </Text>
               <IconButton onClick={handleClose}>
                 <Cancel sx={{ color: "#fff" }} />
@@ -152,25 +163,25 @@ export default function AddEducationModal({
                           name: "name",
                         },
                         {
-                          label: "Course of Study",
-                          placeholder: "Course of Study",
+                          label: "Location",
+                          placeholder: "Location",
                           required: true,
                           type: "text",
-                          name: "course",
+                          name: "location",
                         },
                         {
                           label: "Start Date",
                           placeholder: "Start Date",
                           required: true,
                           type: "date",
-                          name: "startDate", 
+                          name: "startDate",
                         },
                         {
                           label: "End Date",
                           placeholder: "End Date",
                           required: true,
                           type: "date",
-                          name: "endDate", 
+                          name: "endDate",
                         },
                       ].map((item, index) => (
                         <Grid item xs={12} key={index}>
@@ -232,9 +243,9 @@ export default function AddEducationModal({
   );
 }
 
-AddEducationModal.propTypes = {
+EditExperienceModal.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
-  setEducations: PropTypes.func,
-  educations: PropTypes.array,
+  setExperiences: PropTypes.func,
+  experiences: PropTypes.array,
 };

@@ -125,24 +125,6 @@ function Address({ portfolio }) {
             fw="500"
             color="gray"
           >
-            Client
-          </Text>
-          <Text
-            sx={{ textAlign: "left", my: 0 }}
-            fs="18px"
-            fw="600"
-            color="#fff"
-          >
-            {portfolio?.client}
-          </Text>
-        </Box>
-        <Box>
-          <Text
-            sx={{ textAlign: "left", my: 0 }}
-            fs="14px"
-            fw="500"
-            color="gray"
-          >
             Date
           </Text>
           <Text
@@ -289,14 +271,6 @@ function ServiceHeader({ portfolio }) {
         ff="Helvetica Neue"
         color="#fff"
         sx={{ textAlign: "center" }}
-      >
-        {portfolio?.client}
-      </Text>
-      <Text
-        fs={{ md: "16px", xs: "12px" }}
-        fw="400"
-        color="#ccc"
-        sx={{ mx: { md: 25, xs: 0 }, textAlign: "center" }}
       >
         {portfolio?.name}
       </Text>

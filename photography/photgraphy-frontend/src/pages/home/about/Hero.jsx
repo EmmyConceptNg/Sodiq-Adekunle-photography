@@ -65,6 +65,7 @@ function PersonalInfo({admin}) {
         boxShadow:
           "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
         textAlign: "center",
+        height: "100%",
       }}
       component={motion.div}
       initial={{ opacity: 0, y: 50 }}
@@ -74,7 +75,7 @@ function PersonalInfo({admin}) {
       <Image
         src={admin?.image ? getImageUrl(admin?.image) : "/icons/profile.png"}
         alt={admin?.firstName}
-        sx={{ borderRadius: "20px" }}
+        sx={{ borderRadius: "20px", height: "100%" }}
       />
     </Grid>
   );
@@ -100,9 +101,9 @@ function About({admin}) {
       initial={{ opacity: 0, y: 50 }}
       animate={controls}
       ref={ref}
-      
+      sx={{ height: "100%" }}
     >
-      <Stack spacing={5}>
+      <Stack spacing={5} sx={{ height: "100%" }}>
         <Box
           bgcolor="#121214"
           sx={{
@@ -128,9 +129,9 @@ function About({admin}) {
             color="#ccc"
             sx={{ my: 3 }}
           >
-           {admin?.about}
+            {admin?.about}
           </Text>
-          
+
           <Button
             sx={{ mt: 3 }}
             onClick={() => navigate("/contact")}

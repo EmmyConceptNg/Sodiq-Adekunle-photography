@@ -65,7 +65,7 @@ export default function AddPortfolioModal({
 }) {
   const initialValues = {
     name: "",
-    client: "",
+   
     date: "",
     description: "",
     service: "",
@@ -73,7 +73,6 @@ export default function AddPortfolioModal({
 
   const validation = Yup.object({
     name: Yup.string().required("Required"),
-    client: Yup.string().required("Required"),
     date: Yup.date().required("Required"),
     description: Yup.string().required("Required"),
   });
@@ -95,7 +94,6 @@ export default function AddPortfolioModal({
       const formData = new FormData();
       formData.append("service", values.service);
       formData.append("name", values.name);
-      formData.append("client", values.client);
       formData.append("date", values.date);
       formData.append("description", values.description);
       files.forEach((file) => {
@@ -166,13 +164,6 @@ export default function AddPortfolioModal({
                           required: true,
                           type: "text",
                           name: "name",
-                        },
-                        {
-                          label: "Client Name",
-                          placeholder: "Client Name",
-                          required: true,
-                          type: "text",
-                          name: "client",
                         },
                         {
                           label: "Project Date",

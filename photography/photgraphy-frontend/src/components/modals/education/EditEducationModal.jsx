@@ -1,12 +1,4 @@
-import {
-  Box,
-  Modal,
-  Stack,
-  Grid,
-  Divider,
-  IconButton,
-  Grid2,
-} from "@mui/material";
+import { Box, Modal, Stack, Grid, Divider, IconButton } from "@mui/material";
 import * as Yup from "yup";
 import { useState } from "react";
 import Button from "../../Button";
@@ -17,7 +9,10 @@ import { notify } from "../../../utils/Index";
 import Input from "../../Input";
 import { Form, Formik } from "formik";
 import Text from "../../Text";
-import { Cancel, Upload } from "@mui/icons-material";
+import { Cancel } from "@mui/icons-material";
+import SuccessModal from "../others/SuccessModal";
+import ErrorModal from "../others/ErrorModal";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -44,81 +39,82 @@ const scrollableContainerStyle = {
   maxHeight: "calc(90vh - 80px)", // Account for padding and other elements
 };
 
-const imageUploadBoxStyle = {
-  border: "2px dashed #fff",
-  borderRadius: "8px",
-  padding: "20px",
-  textAlign: "center",
-  cursor: "pointer",
-  color: "#fff",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
+const convertDate = (date) => {
+  if (!date) return "";
+  const d = new Date(date);
+  return d.toISOString().split("T")[0]; // Extract the date part in YYYY-MM-DD format
 };
 
 export default function EditEducationModal({
   open,
   setOpen,
   setEducations,
+  selectedEducation,
   educations,
 }) {
   const initialValues = {
-    name: "",
-    client: "",
-    date: "",
-    description: "",
-    service: "",
+    name: selectedEducation?.name || "",
+    course: selectedEducation?.course || "",
+    startDate: convertDate(selectedEducation?.startDate) || "",
+    endDate: convertDate(selectedEducation?.endDate) || "",
   };
 
   const validation = Yup.object({
     name: Yup.string().required("Required"),
-    client: Yup.string().required("Required"),
-    date: Yup.date().required("Required"),
-    description: Yup.string().required("Required"),
+    course: Yup.string().required("Required"),
+    startDate: Yup.date().required("Required"),
+    endDate: Yup.date().required("Required"),
   });
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const [creating, setCreating] = useState(false);
-  const [files, setFiles] = useState([]);
+  // Access Redux tokens
+  const accessToken = useSelector((state) => state.user.accessToken);
 
-  const handleUpdate = async (values) => {
-    if (!files.length || !values.service) {
-      notify("Please fill all input fields and upload images", "error");
-      return false;
-    }
-    setCreating(true);
+  const [successModal, setSuccessModal] = useState(false);
+  const [errorModal, setErrorModal] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleSuccess = (message) => {
+    setMessage(message);
+    setSuccessModal(true);
+  };
+
+  const handleError = (message) => {
+    setMessage(message);
+    setErrorModal(true);
+  };
+
+  const handleUpdate = async (values, actions) => {
     try {
-      const formData = new FormData();
-      formData.append("service", values.service);
-      formData.append("name", values.name);
-      formData.append("client", values.client);
-      formData.append("date", values.date);
-      formData.append("description", values.description);
-      files.forEach((file) => {
-        formData.append("images", file);
-      });
+      console.log("Submitting form with values:", values); // Debugging step
 
-      const response = await axios.post("/api/portfolio", formData);
-      notify(response.data.message, "success");
-      setEducations([...educations, response.data.portfolio]);
-      setCreating(false);
-      handleClose();
+      const response = await axios.put(
+        `/api/educations/${selectedEducation?._id}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const { education } = response.data;
+      setEducations((prev) => [...prev, education]);
+      handleSuccess(
+        response.data.message || "You have successfully added the education"
+      );
+      setOpen(false);
     } catch (error) {
-      console.error("Error saving editing:", error);
-      notify("Failed to create portfolio", "error");
-      setCreating(false);
+      console.error("Error adding education:", error);
+      handleError(
+        error.response?.data?.message || "An error occurred. Please try again"
+      );
+    } finally {
+      actions.setSubmitting(false);
     }
-  };
-
-  const handleFileChange = (event) => {
-    setFiles(Array.from(event.target.files));
-  };
-
-  const openFileDialog = () => {
-    document.getElementById("fileInput").click();
   };
 
   return (
@@ -140,7 +136,7 @@ export default function EditEducationModal({
                 ff="Helvetica Neue"
                 color="#fff"
               >
-                Edit Education
+                Add Education
               </Text>
               <IconButton onClick={handleClose}>
                 <Cancel sx={{ color: "#fff" }} />
@@ -157,7 +153,7 @@ export default function EditEducationModal({
               {({ isSubmitting }) => (
                 <Form>
                   <Stack spacing={10}>
-                    <Grid2 container spacing={{ md: 5, xs: 0 }}>
+                    <Grid container spacing={{ md: 5, xs: 0 }}>
                       {[
                         {
                           label: "Institution Name",
@@ -178,17 +174,17 @@ export default function EditEducationModal({
                           placeholder: "Start Date",
                           required: true,
                           type: "date",
-                          name: "start_date",
+                          name: "startDate",
                         },
                         {
-                          label: "End Date (optional)",
+                          label: "End Date",
                           placeholder: "End Date",
-                          required: false,
+                          required: true,
                           type: "date",
-                          name: "end_date",
+                          name: "endDate",
                         },
                       ].map((item, index) => (
-                        <Grid2 size={{ xs: 12 }} key={index}>
+                        <Grid item xs={12} key={index}>
                           <Box
                             display="flex"
                             flexDirection="column"
@@ -204,13 +200,11 @@ export default function EditEducationModal({
                               aria-label={item.label}
                               type={item.type}
                               defaultValue={item?.defaultValue}
-                              multiline={item.multiline}
-                              rows={item.rows}
                             />
                           </Box>
-                        </Grid2>
+                        </Grid>
                       ))}
-                    </Grid2>
+                    </Grid>
                     <Stack
                       spacing={2}
                       direction="row"
@@ -239,6 +233,12 @@ export default function EditEducationModal({
           </Box>
         </Box>
       </Modal>
+      <SuccessModal
+        message={message}
+        open={successModal}
+        setOpen={setSuccessModal}
+      />
+      <ErrorModal message={message} open={errorModal} setOpen={setErrorModal} />
     </>
   );
 }

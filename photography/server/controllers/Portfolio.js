@@ -10,7 +10,7 @@ const checkDuplicateName = async (name) => {
 
 export const addPortfolio = async (req, res, next) => {
   try {
-    const { name, client, date, description, service } = req.body;
+    const { name, date, description, service } = req.body;
 
     // Case-insensitive check for duplicate portfolio name
     const duplicatePortfolio = await Portfolio.findOne({
@@ -29,7 +29,6 @@ export const addPortfolio = async (req, res, next) => {
 
     const portfolio = await Portfolio.create({
       name,
-      client,
       date,
       description,
       service,
@@ -65,7 +64,7 @@ export const getPortfolio = (req, res, next) => {
 
 export const updatePortfolio = async (req, res, next) => {
   try {
-    const { name, client, date, description, service, removedImages } =
+    const { name, date, description, service, removedImages } =
       req.body;
 
     // Case-insensitive check for duplicate portfolio name
@@ -106,7 +105,6 @@ export const updatePortfolio = async (req, res, next) => {
 
     // Update the portfolio with new data
     portfolio.name = name;
-    portfolio.client = client;
     portfolio.date = date;
     portfolio.description = description;
     portfolio.service = service;
@@ -129,7 +127,7 @@ export const deletePortfolio = async (req, res, next) => {
     const portfolio = await Portfolio.findById(portfolioId);
     if (!portfolio) errorHandling("404|Could not find portfolio.|");
 
-    await Portfolio.findOneAndDelete(portfolioId);
+    await Portfolio.findOneAndDelete({_id:portfolioId});
 
     const portfolios = await Portfolio.find();
     res.status(200).json({

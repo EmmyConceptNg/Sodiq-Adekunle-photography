@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 const PortfolioSchema = mongoose.Schema({
   name: String,
   description: String,
-  client: String,
   date: Date,
   images: [String],
 },{timestamps : true});

@@ -1,20 +1,16 @@
 import {
   Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
   Divider,
-  Tab,
-  Tabs,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Text from "../../../components/Text";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import PropTypes from "prop-types";
 import { SubwayFile13 } from "../../../../public/svgs/SubwayFile13";
+import axios from '../../../api/axios'
+import moment from "moment";
 
 const experience = [
   {
@@ -38,6 +34,8 @@ const experience = [
 ];
 
 export default function Experience() {
+  const [experiences, setExperiences] = useState([])
+  const [educations, setEducations] = useState([])
   const controls = useAnimation();
   const [ref, inView] = useInView();
 
@@ -48,6 +46,32 @@ export default function Experience() {
       transition: { duration: 2.0 },
     });
   }
+
+
+  useEffect(() => {
+    axios
+      .get("/api/experiences", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setExperiences(response.data.experiences);
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get("/api/educations", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setEducations(response.data.educations);
+      });
+  }, []);
 
   return (
     <Box sx={{ mx: { md: "200px", xs: "20px" }, mt: 5 }} ref={ref}>
@@ -79,7 +103,7 @@ export default function Experience() {
             Experience
           </Text>
 
-          {experience.map((item, index) => (
+          {experiences.map((item, index) => (
             <>
               <Box
                 display="flex"
@@ -87,20 +111,24 @@ export default function Experience() {
                 justifyContent="flex-start"
                 gap={2}
               >
-                <Box>{item.icon}</Box>
+                <Box>
+                  <SubwayFile13 />
+                </Box>
                 <Box>
                   <Text fs={{ md: "18px", xs: "12px" }} fw="500" color="gray">
-                    {item.date}
+                    {`${moment(item.startDate).format(
+                      "MMM Do YYYY"
+                    )} - ${moment(item.endDate).format("MMM Do YYYY")}`}
                   </Text>
                   <Text fs={{ md: "24px", xs: "18px" }} fw="500" color="#fff">
-                    {item.title}
+                    {item.name}
                   </Text>
                   <Text fs={{ md: "18px", xs: "12px" }} fw="500" color="gray">
                     {item.location}
                   </Text>
                 </Box>
               </Box>
-              {index != experience.length - 1 && (
+              {index != experiences.length - 1 && (
                 <Divider sx={{ bgcolor: "gray", my: 3 }} />
               )}
             </>
@@ -127,7 +155,7 @@ export default function Experience() {
             Education
           </Text>
 
-          {experience.map((item, index) => (
+          {educations.map((item, index) => (
             <>
               <Box
                 display="flex"
@@ -135,20 +163,24 @@ export default function Experience() {
                 justifyContent="flex-start"
                 gap={2}
               >
-                <Box>{item.icon}</Box>
+                <Box>
+                  <SubwayFile13 />
+                </Box>
                 <Box>
                   <Text fs={{ md: "18px", xs: "12px" }} fw="500" color="gray">
-                    {item.date}
+                    {`${moment(item.startDate).format(
+                      "MMM Do YYYY"
+                    )} - ${moment(item.endDate).format("MMM Do YYYY")}`}
                   </Text>
                   <Text fs={{ md: "24px", xs: "18px" }} fw="500" color="#fff">
-                    {item.title}
+                    {item.course}
                   </Text>
                   <Text fs={{ md: "18px", xs: "12px" }} fw="500" color="gray">
-                    {item.location}
+                    {item.name}
                   </Text>
                 </Box>
               </Box>
-              {index != experience.length - 1 && (
+              {index != educations.length - 1 && (
                 <Divider sx={{ bgcolor: "gray", my: 3 }} />
               )}
             </>

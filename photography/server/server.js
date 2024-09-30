@@ -9,6 +9,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 import userRoutes from "./routes/authRoutes.js";
 import portfoliosRoutes from "./routes/portfolioRoutes.js";
+import educationsRoutes from "./routes/educationRoutes.js";
+import experiencesRoutes from "./routes/experienceRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { errorProcessing, logErrorToFile } from "./middleware/errorHandler.js";
@@ -59,6 +61,8 @@ app.get("/", function (req, res) {
 });
 app.use("/api/auth", userRoutes);
 app.use("/api/portfolios", portfoliosRoutes);
+app.use("/api/educations", educationsRoutes);
+app.use("/api/experiences", experiencesRoutes);
 
 // Swagger Api Documentation
 const swaggerDocument = YAML.load(path.resolve(__dirname, "swagger.yaml"));

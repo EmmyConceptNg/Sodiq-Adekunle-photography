@@ -59,6 +59,7 @@ export default function DeleteModal({
 
   const handleDelete = () => {
     setDeleting(true);
+    console.log(`Deleting item with ID: ${delId}`); // Debugging log
     axios
       .delete(route, {
         headers: {
@@ -67,15 +68,15 @@ export default function DeleteModal({
         },
       })
       .then((response) => {
-        cleanUp((prevData) =>
-          prevData.filter((data) => data._id !== delId)
-        );
+        console.log(`Deleted item with ID: ${delId}`); // Debugging log
+        cleanUp((prevData) => prevData.filter((data) => data._id !== delId));
         handleClose(); // Close DeleteModal first
         handleSuccess(
           response.data.message || "You have successfully deleted this data"
         );
       })
       .catch((error) => {
+        console.error(`Error deleting item with ID: ${delId}`, error); // Debugging log
         handleClose(); // Close DeleteModal first
         handleError(
           error.response?.data?.message || "An error occurred. Please try again"

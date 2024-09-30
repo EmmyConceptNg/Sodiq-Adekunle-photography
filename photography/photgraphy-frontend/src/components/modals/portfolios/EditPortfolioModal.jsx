@@ -76,7 +76,6 @@ export default function EditPortfolioModal({
 }) {
   const initialValues = {
     name: selectedPortfolio?.name || "",
-    client: selectedPortfolio?.client || "",
     date: convertDate(selectedPortfolio?.date) || "",
     description: selectedPortfolio?.description || "",
     service: selectedPortfolio?.service || "",
@@ -84,7 +83,6 @@ export default function EditPortfolioModal({
 
   const validation = Yup.object({
     name: Yup.string().required("Required"),
-    client: Yup.string().required("Required"),
     date: Yup.date().required("Required"),
     description: Yup.string().required("Required"),
   });
@@ -129,7 +127,6 @@ export default function EditPortfolioModal({
       const formData = new FormData();
       formData.append("service", values.service);
       formData.append("name", values.name);
-      formData.append("client", values.client);
       formData.append("date", values.date);
       formData.append("description", values.description);
       files.forEach((file) => {
@@ -239,13 +236,6 @@ export default function EditPortfolioModal({
                           required: true,
                           type: "text",
                           name: "name",
-                        },
-                        {
-                          label: "Client Name",
-                          placeholder: "Client Name",
-                          required: true,
-                          type: "text",
-                          name: "client",
                         },
                         {
                           label: "Portfolio Date",

@@ -225,11 +225,9 @@ function ProjectTab() {
                     </Box>
                     <CardContent>
                       <Text fs="24px" fw="600">
-                        {portfolio?.client}
-                      </Text>
-                      <Text fs="14px" color="#ccc">
                         {portfolio?.name}
                       </Text>
+                     
                     </CardContent>
                   </CardActionArea>
                 </Card>
