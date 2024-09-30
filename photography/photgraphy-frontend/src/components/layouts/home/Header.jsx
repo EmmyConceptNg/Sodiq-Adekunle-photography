@@ -39,7 +39,7 @@ export default function Header(props) {
             component="img"
             src="/logo/sodiq-logo.png"
             sx={{
-              height: { md: "90px", xs: "60px" },
+              height: { md: "80px", xs: "60px" },
             }}
           />
 

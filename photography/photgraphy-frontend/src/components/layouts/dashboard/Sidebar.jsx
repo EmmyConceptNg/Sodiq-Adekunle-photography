@@ -41,14 +41,21 @@ export const Sidebar = () => {
     >
       <Box>
         <Box display="flex" mt={2} px={2}>
-          <Text
+           <Box
+            component="img"
+            src="/logo/sodiq-logo.png"
+            sx={{
+              height: { md: "70px", xs: "60px" },
+            }}
+          />
+          {/* <Text
             color="#fff"
             fw="400"
             fs="24"
             ff="Sacramento, cursive"
           >
             Sodiq Adekunle photography
-          </Text>
+          </Text> */}
         </Box>
 
         <Box mt={5} sx={{ bgcolor: "#191919" }}>

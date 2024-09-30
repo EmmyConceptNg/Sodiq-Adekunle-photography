@@ -108,7 +108,7 @@ export default function DashboardLayout() {
               padding: 2,
             }}
           >
-            <Toolbar sx={{ alignItems:'center' }}>
+            <Toolbar sx={{ alignItems: "flex-start" }}>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -118,15 +118,22 @@ export default function DashboardLayout() {
               >
                 <Menu sx={{ color: "#fff" }} />
               </IconButton>
-              <Box display={{ md : 'none' }}>
-                <Text
+              <Box display={{ md: "none" }}>
+                <Box
+                  component="img"
+                  src="/logo/sodiq-logo.png"
+                  sx={{
+                    height: { md: "80px", xs: "60px" },
+                  }}
+                />
+                {/* <Text
                   color="#fff"
                   fw="400"
                   fs="24"
                   ff="Sacramento, cursive"
                 >
                   Sodiq Adekunle photography
-                </Text>
+                </Text> */}
               </Box>
               <Box sx={{ flexGrow: 1 }} />
               <Nav />
