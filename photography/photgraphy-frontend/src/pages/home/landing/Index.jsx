@@ -34,7 +34,7 @@ export default function Home() {
         <Box width="100%" height="100vh" pt={2}>
           <Header />
           <Hero />
-          <Projects />
+          {/* <Projects /> */}
           <Action />
           <Footer />
         </Box>
