@@ -67,6 +67,8 @@ export const updatePortfolio = async (req, res, next) => {
     const { name, date, description, service, removedImages } =
       req.body;
 
+      console.log(req.body);
+
     // Case-insensitive check for duplicate portfolio name
     const duplicatePortfolio = await Portfolio.findOne({
       name: { $regex: new RegExp("^" + name + "$", "i") },
@@ -82,6 +84,8 @@ export const updatePortfolio = async (req, res, next) => {
     // Find the existing portfolio
     let portfolio = await Portfolio.findById(req.params.portfolioId);
 
+    
+
     if (!portfolio) {
       return res.status(404).json({ message: "Portfolio not found." });
     }
@@ -89,7 +93,7 @@ export const updatePortfolio = async (req, res, next) => {
     // Parse removedImages
     const removedImagesArray = JSON.parse(removedImages || "[]");
     removedImagesArray.forEach((imagePath) => {
-      const relativePath = imagePath.replace(`${process.env.SERVER_URL}/`, ""); // Adjust this based on your base URL
+      const relativePath = imagePath.replace(`${process.env.SERVER_URL}/`, "");
       fs.unlink(path.join(__dirname, relativePath), (err) => {
         if (err) console.error("Error deleting image:", err);
       });
@@ -116,6 +120,7 @@ export const updatePortfolio = async (req, res, next) => {
       .status(200)
       .json({ portfolio, message: "Portfolio Updated Successfully" });
   } catch (error) {
+    console.log(error)
     next(new Error(error.stack));
   }
 };
