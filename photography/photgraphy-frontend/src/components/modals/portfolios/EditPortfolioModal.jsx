@@ -228,7 +228,7 @@ export default function EditPortfolioModal({
               {({ isSubmitting }) => (
                 <Form>
                   <Stack spacing={10}>
-                    <Grid2 container spacing={{ md: 5, xs: 0 }}>
+                    <Grid2 container spacing={{ md: 5, xs: 5 }}>
                       {[
                         {
                           label: "Portfolio Name",

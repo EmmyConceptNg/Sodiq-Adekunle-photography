@@ -156,7 +156,7 @@ export default function AddPortfolioModal({
               {({ isSubmitting }) => (
                 <Form>
                   <Stack spacing={10}>
-                    <Grid2 container spacing={{ md: 5, xs: 0 }}>
+                    <Grid2 container spacing={{ md: 5, xs: 5 }}>
                       {[
                         {
                           label: "Project Name",
@@ -182,7 +182,7 @@ export default function AddPortfolioModal({
                           rows: 5,
                         },
                       ].map((item, index) => (
-                        <Grid2 size={{ xs: 12 }} key={index}>
+                        <Grid2 size={ 12 } key={index}>
                           <Box
                             display="flex"
                             flexDirection="column"
