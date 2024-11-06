@@ -8,7 +8,7 @@ let baseURL = "";
 if (window.location.origin.includes("localhost")) {
   baseURL = "http://localhost:8080";
 } else {
-  baseURL = "https://sodiq-adekunle-photography.onrender.com";
+  baseURL = "https://api.sodiq-adekunle-photography.com";
 }
 
 const instance = axios.create({
