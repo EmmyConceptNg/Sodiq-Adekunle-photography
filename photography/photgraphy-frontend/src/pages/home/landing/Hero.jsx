@@ -113,7 +113,7 @@ export default function Hero() {
           </>
         )}
       </Grid>
-      <Companies />
+      {/* <Companies /> */}
     </>
   );
 }

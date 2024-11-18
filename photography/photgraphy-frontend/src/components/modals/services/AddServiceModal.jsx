@@ -3,9 +3,9 @@ import {
   Modal,
   Stack,
   Grid,
-  Divider,
-  IconButton,
   Grid2,
+  IconButton,
+  Divider,
 } from "@mui/material";
 import * as Yup from "yup";
 import { useState } from "react";
@@ -16,9 +16,11 @@ import { ToastContainer } from "react-toastify";
 import { notify } from "../../../utils/Index";
 import Input from "../../Input";
 import { Form, Formik } from "formik";
+import { useSelector } from "react-redux";
+import SuccessModal from "../others/SuccessModal";
+import ErrorModal from "../others/ErrorModal";
 import Text from "../../Text";
-import { Cancel, Upload } from "@mui/icons-material";
-
+import { Cancel, Upload, Delete } from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -33,20 +35,20 @@ const style = {
   border: "1px solid gray",
   borderRadius: "18px",
   p: 4,
-  maxHeight: "90vh", // Ensure the modal doesn't exceed the viewport height
-  overflow: "hidden", // Hide overflow
+  maxHeight: "90vh",
+  overflow: "hidden",
 };
 
 const scrollableContainerStyle = {
-  overflowY: "auto", // Enable vertical scrolling
-  paddingRight: "16px", // Ensure padding for scrollbar space
-  overflowX: "hidden", // Disable horizontal scrolling
-  height: "auto", // Adjust height automatically
-  maxHeight: "calc(90vh - 80px)", // Account for padding and other elements
+  overflowY: "auto",
+  paddingRight: "16px",
+  overflowX: "hidden",
+  height: "auto",
+  maxHeight: "calc(90vh - 80px)",
 };
 
 const imageUploadBoxStyle = {
-  border: "2px dashed #fff",
+  border: "2px dashed gray",
   borderRadius: "8px",
   padding: "20px",
   textAlign: "center",
@@ -57,7 +59,7 @@ const imageUploadBoxStyle = {
   alignItems: "center",
 };
 
-export default function AddPortfolioModal({
+export default function AddServiceModal({
   open,
   setOpen,
   setServices,
@@ -65,50 +67,59 @@ export default function AddPortfolioModal({
 }) {
   const initialValues = {
     name: "",
-   
-    date: "",
-    description: "",
-    service: "",
   };
+
+  // Access Redux tokens
+  const accessToken = useSelector((state) => state.user.accessToken);
+
+  const [successModal, setSuccessModal] = useState(false);
+  const [errorModal, setErrorModal] = useState(false);
+  const [message, setMessage] = useState("");
 
   const validation = Yup.object({
     name: Yup.string().required("Required"),
-    date: Yup.date().required("Required"),
-    description: Yup.string().required("Required"),
+  
   });
-
+  
   const handleClose = () => {
     setOpen(false);
   };
 
-  const [creating, setCreating] = useState(false);
-  const [files, setFiles] = useState([]);
+  const handleSuccess = (message) => {
+    setMessage(message);
+    setSuccessModal(true);
+  };
 
-  const handleUpdate = async (values) => {
-    if (!files.length || !values.service) {
-      notify("Please fill all input fields and upload images", "error");
-      return false;
-    }
-    setCreating(true);
+  const handleError = (message) => {
+    setMessage(message);
+    setErrorModal(true);
+  };
+
+  const handleUpdate = async (values, actions) => {
     try {
       const formData = new FormData();
-      formData.append("service", values.service);
       formData.append("name", values.name);
-      formData.append("date", values.date);
-      formData.append("description", values.description);
-      files.forEach((file) => {
-        formData.append("images", file);
+      
+      const response = await axios.post("/api/services", formData, {
+        headers: {
+          "Content-Type": "application/json", // Don't specify a boundary
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
-      const response = await axios.post("/api/portfolio", formData);
-      notify(response.data.message, "success");
-      setServices([...services, response.data.portfolio]);
-      setCreating(false);
-      handleClose();
+      const { service } = response.data;
+      setServices((prev) => [...prev, service]);
+      handleSuccess(
+        response.data.message || "You have successfully added the service"
+      );
+      setOpen(false);
     } catch (error) {
-      console.error("Error saving editing:", error);
-      notify("Failed to create portfolio", "error");
-      setCreating(false);
+      console.error("Error adding service:", error);
+      handleError(
+        error.response?.data?.message || "An error occurred. Please try again"
+      );
+    } finally {
+      actions.setSubmitting(false);
     }
   };
 
@@ -120,9 +131,19 @@ export default function AddPortfolioModal({
     document.getElementById("fileInput").click();
   };
 
+  const removeFile = (index) => {
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
   return (
     <>
       <ToastContainer />
+      <SuccessModal
+        message={message}
+        open={successModal}
+        setOpen={setSuccessModal}
+      />
+      <ErrorModal message={message} open={errorModal} setOpen={setErrorModal} />
       <Modal
         open={open}
         onClose={handleClose}
@@ -139,7 +160,7 @@ export default function AddPortfolioModal({
                 ff="Helvetica Neue"
                 color="#fff"
               >
-                Add Portfolio
+                Add Service
               </Text>
               <IconButton onClick={handleClose}>
                 <Cancel sx={{ color: "#fff" }} />
@@ -159,30 +180,30 @@ export default function AddPortfolioModal({
                     <Grid2 container spacing={{ md: 5, xs: 5 }}>
                       {[
                         {
-                          label: "Project Name",
-                          placeholder: "Project Name",
+                          label: "Service Name",
+                          placeholder: "Service Name",
                           required: true,
                           type: "text",
                           name: "name",
                         },
-                        {
-                          label: "Project Date",
-                          placeholder: "Project Date",
-                          required: true,
-                          type: "date",
-                          name: "date",
-                        },
-                        {
-                          label: "Project Description",
-                          placeholder: "Project Description",
-                          required: true,
-                          type: "text",
-                          name: "description",
-                          multiline: true,
-                          rows: 5,
-                        },
+                        // {
+                        //   label: "Portfolio Date",
+                        //   placeholder: "Portfolio Date",
+                        //   required: true,
+                        //   type: "date",
+                        //   name: "date",
+                        // },
+                        // {
+                        //   label: "Portfolio Description",
+                        //   placeholder: "Portfolio Description",
+                        //   required: true,
+                        //   type: "text",
+                        //   name: "description",
+                        //   multiline: true,
+                        //   rows: 5,
+                        // },
                       ].map((item, index) => (
-                        <Grid2 size={ 12 } key={index}>
+                        <Grid2 size={{ xs: 12 }} key={index}>
                           <Box
                             display="flex"
                             flexDirection="column"
@@ -205,7 +226,8 @@ export default function AddPortfolioModal({
                         </Grid2>
                       ))}
                     </Grid2>
-                    <Box my={4}>
+
+                    {/* <Box my={4}>
                       <input
                         type="file"
                         id="fileInput"
@@ -220,18 +242,34 @@ export default function AddPortfolioModal({
                           Click here to add multiple images to the portfolio
                         </Text>
                       </Box>
-                      <Grid container spacing={2} mt={2}>
+                      <Grid2 container spacing={2} mt={2}>
                         {files.map((file, index) => (
-                          <Grid item xs={4} key={index}>
-                            <img
-                              src={URL.createObjectURL(file)}
-                              alt={`Uploaded ${index}`}
-                              style={{ width: "100%", height: "auto" }}
-                            />
-                          </Grid>
+                          <Grid2 size={{ xs: 4 }} key={index}>
+                            <Box position="relative">
+                              <img
+                                src={URL.createObjectURL(file)}
+                                alt={`Uploaded ${index}`}
+                                style={{ width: "100%", height: "auto" }}
+                              />
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  position: "absolute",
+                                  top: 5,
+                                  right: 5,
+                                  backgroundColor: "rgba(0, 0, 0, 0.6)",
+                                  color: "#fff",
+                                }}
+                                onClick={() => removeFile(index)}
+                              >
+                                <Delete />
+                              </IconButton>
+                            </Box>
+                          </Grid2>
                         ))}
-                      </Grid>
-                    </Box>
+                      </Grid2>
+                    </Box> */}
+
                     <Stack
                       spacing={2}
                       direction="row"
@@ -244,6 +282,7 @@ export default function AddPortfolioModal({
                       >
                         Cancel
                       </Button>
+
                       <Button
                         type="submit"
                         loading={isSubmitting}
@@ -264,9 +303,9 @@ export default function AddPortfolioModal({
   );
 }
 
-AddPortfolioModal.propTypes = {
-  open: PropTypes.bool,
-  setOpen: PropTypes.func,
-  setServices: PropTypes.func,
-  services: PropTypes.array,
+AddServiceModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  setOpen: PropTypes.func.isRequired,
+  setServices: PropTypes.func.isRequired,
+  services: PropTypes.array.isRequired,
 };

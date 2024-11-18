@@ -39,7 +39,7 @@ router.post(
 );
 
 router.get("/", getPortfolios);
-router.get("/:portfolioId", getPortfolio);
+router.get("/:serviceId", getPortfolio);
 
 router.put(
   "/:portfolioId",

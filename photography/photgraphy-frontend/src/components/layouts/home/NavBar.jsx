@@ -38,14 +38,14 @@ export default function NavBar() {
 
    useEffect(() => {
      axios
-       .get("/api/portfolios", {
+       .get("/api/services", {
          headers: {
            "Content-Type": "application/json",
          },
        })
        .then((response) => {
          console.log(response.data);
-         setPortfolios(response.data.portfolios);
+         setPortfolios(response.data.services);
        });
    }, []);
 

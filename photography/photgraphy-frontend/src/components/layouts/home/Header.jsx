@@ -61,7 +61,7 @@ export default function Header(props) {
             <NavBar />
           </Box>
           <Box display={{ md: "block", xs: "none" }}>
-            <Action />
+            {/* <Action /> */}
           </Box>
         </ToolbarStyled>
       </AppBarStyled>

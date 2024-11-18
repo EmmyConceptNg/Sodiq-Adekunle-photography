@@ -22,6 +22,7 @@ import ErrorModal from "../others/ErrorModal";
 import Text from "../../Text";
 import { Cancel, Upload, Delete } from "@mui/icons-material";
 import { getImageUrl } from "../../../api/axios";
+import SelectInput from "../../Select";
 
 // Convert date to YYYY-MM-DD format
 const convertDate = (date) => {
@@ -76,14 +77,12 @@ export default function EditPortfolioModal({
 }) {
   const initialValues = {
     name: selectedPortfolio?.name || "",
-    date: convertDate(selectedPortfolio?.date) || "",
     description: selectedPortfolio?.description || "",
     service: selectedPortfolio?.service || "",
   };
 
   const validation = Yup.object({
     name: Yup.string().required("Required"),
-    date: Yup.date().required("Required"),
     description: Yup.string().required("Required"),
   });
 
@@ -95,6 +94,26 @@ export default function EditPortfolioModal({
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState([]);
   const [removedFiles, setRemovedFiles] = useState([]); // Track removed files
+  const [services, setServices] = useState([]);
+
+
+  useEffect(() => {
+    axios
+      .get("/api/services", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        setServices(
+          response.data.services.map((service) => ({
+            label: service.name,
+            value: service._id,
+          }))
+        );
+      });
+  }, []);
+
 
   useEffect(() => {
     if (selectedPortfolio && selectedPortfolio.images) {
@@ -229,24 +248,24 @@ export default function EditPortfolioModal({
                 <Form>
                   <Stack spacing={10}>
                     <Grid2 container spacing={{ md: 5, xs: 5 }}>
+                      <SelectInput
+                        id="service"
+                        label="Portfolio"
+                        name="service"
+                        options={services}
+                      />
                       {[
                         {
-                          label: "Portfolio Name",
-                          placeholder: "Portfolio Name",
+                          label: " Name",
+                          placeholder: " Name",
                           required: true,
                           type: "text",
                           name: "name",
                         },
+
                         {
-                          label: "Portfolio Date",
-                          placeholder: "Portfolio Date",
-                          required: true,
-                          type: "date",
-                          name: "date",
-                        },
-                        {
-                          label: "Portfolio Description",
-                          placeholder: "Portfolio Description",
+                          label: " Description",
+                          placeholder: " Description",
                           required: true,
                           type: "text",
                           name: "description",

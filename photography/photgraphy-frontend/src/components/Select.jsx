@@ -10,18 +10,48 @@ import Text from "./Text";
 import { useField } from "formik";
 // ... other imports
 
-const SelectField = styled(Select)(({ height }) => ({
+const SelectField = styled(Select)(({ height, sx }) => ({
   // Styles similar to your InputField, adjusted for Select component
   "& .MuiSelect-select": {
     height: height,
     padding: "10px 14px",
     borderRadius: "8px",
-    backgroundColor: "#fff",
-    color: "#667085",
+    border: "1px solid gray",
+    outline: "none",
+    backgroundColor: sx ? sx.bgcolor : "#fff",
+    color: "#2DDB81",
+    fontSize: "inherit",
+    "&::placeholder": {
+      color: "gray",
+    },
+  },
+  "&.MuiOutlinedInput-root": {
+    padding: "0px !important", // Remove internal padding
+    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+    fontWeight: "400",
+    fontSize: "1rem",
+    lineHeight: "1.4375em",
+    letterSpacing: "0.00938em",
+    color: "rgba(0, 0, 0, 0.87)",
+    boxSizing: "border-box",
+    cursor: "text",
+    display: "inline-flex",
+    alignItems: "center",
+    width: "100%",
+    borderRadius: "4px",
+  },
+  "& .MuiOutlinedInput-notchedOutline": {
+    border: "none",
+    outline: "none",
+  },
+  "& .MuiInputLabel-outlined": {
+    transform: "translate(14px, 18px) scale(1)",
+  },
+  "& .MuiInputLabel-shrink": {
+    transform: "translate(14px, -6px) scale(0.75)",
   },
   // ... other styles if needed
 }));
-
 export default function SelectInput({
   required = true,
   id,
@@ -29,22 +59,19 @@ export default function SelectInput({
   name,
   height = "44px",
   width,
-  options = [], // Added an options prop for the dropdown items
+  options = [],
+  placeholder = "Select an option", // Add a placeholder prop
   sx,
-  // ... other props
 }) {
-  // Your useState and handlers remain the same if needed for password toggle
-
-  // Your Formik field logic
   const [field, meta] = useField(name);
 
   return (
     <FormControl fullWidth sx={{ height, ...sx }} variant="outlined">
       {label && (
-        <InputLabel id={`${id}-label`}>
+        <label id={`${id}-label`} style={{ color : '#fff' }}>
           {label}
           {required && <span style={{ color: "red" }}>*</span>}
-        </InputLabel>
+        </label>
       )}
       <SelectField
         labelId={`${id}-label`}
@@ -53,10 +80,16 @@ export default function SelectInput({
         fullWidth
         name={name}
         required={required}
-        // value={value} // You would control this with Formik `field.value`
-        {...field} // Spreads Formik field props into Select
+        displayEmpty
+        {...field}
         sx={{ width }}
       >
+        {/* Placeholder MenuItem */}
+        <MenuItem value="" disabled style={{ color: "gray" }}>
+          {placeholder}
+        </MenuItem>
+
+        {/* Render Options */}
         {options.map((option, index) => (
           <MenuItem key={index} value={option.value}>
             {option.label}
@@ -68,7 +101,6 @@ export default function SelectInput({
           {meta.error}
         </Text>
       ) : null}
-      {/* You can still include details or helper text if needed */}
     </FormControl>
   );
 }
@@ -81,15 +113,11 @@ SelectInput.propTypes = {
     })
   ).isRequired,
   required: PropTypes.bool,
-  isPin: PropTypes.bool,
   id: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   name: PropTypes.string,
   width: PropTypes.string,
   height: PropTypes.string,
-  type: PropTypes.string,
-  endAdornment: PropTypes.element,
-  details: PropTypes.string,
   sx: PropTypes.object,
 };

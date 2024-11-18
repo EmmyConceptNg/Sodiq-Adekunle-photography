@@ -9,6 +9,10 @@ import { useNavigate } from "react-router-dom";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Email, LocationOnSharp, Phone } from "@mui/icons-material";
+import { notify } from "../../../utils/Index";
+import { ToastContainer } from "react-toastify";
+import axios, { getImageUrl } from "../../../api/axios";
+import { useState } from "react";
 
 
 
@@ -189,13 +193,56 @@ function About() {
 
 
 function Form (){
+const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmitForm = async () => {
+    setLoading(true);
+    const { fullName, email, message } = formData;
+
+    if (!fullName || !email || !message) {
+      notify("Please fill all fields", "error");
+      return;
+    }
+    
+      axios.post("/api/contact", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(()=>{
+          setFormData({ fullName: "", email: "", message: "" });
+          notify("Message sent successfully!", "success");
+      }).catch((error) => {
+      console.error("Error sending message:", error);
+      notify("An error occurred. Please try again later.", "error");
+    }).finally(()=>{
+      setLoading(false);
+    })
+
+      
+   
+  };
+
   return (
     <>
+      <ToastContainer />
       <Grid container spacing={3}>
         <Grid size={{ md: 6, xs: 12 }}>
           <TextField
             fullWidth
+            name="fullName"
             placeholder="Full Name"
+            value={formData.fullName}
+            onChange={handleChange}
             sx={{
               backgroundColor: "white",
               borderRadius: "8px",
@@ -208,8 +255,11 @@ function Form (){
         <Grid size={{ md: 6, xs: 12 }}>
           <TextField
             fullWidth
-            placeholder="Email Address"
+            name="email"
             type="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
             sx={{
               backgroundColor: "white",
               borderRadius: "8px",
@@ -222,9 +272,12 @@ function Form (){
         <Grid size={{ md: 12, xs: 12 }}>
           <TextField
             fullWidth
+            name="message"
             multiline
             rows={4}
             placeholder="Message"
+            value={formData.message}
+            onChange={handleChange}
             sx={{
               backgroundColor: "white",
               borderRadius: "8px",
@@ -234,11 +287,14 @@ function Form (){
             }}
           />
         </Grid>
-        <Button variant="contained" height="40px">
-          Send Message
+        <Button loading={loading} onClick={handleSubmitForm} variant="contained" height="40px">
+          {!loading && "Send Message"}
         </Button>
       </Grid>
     </>
   );
 }
 
+
+
+  

@@ -8,7 +8,7 @@ import {
   Divider,
 } from "@mui/material";
 import * as Yup from "yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../Button";
 import PropTypes from "prop-types";
 import axios from "../../../api/axios";
@@ -21,6 +21,7 @@ import SuccessModal from "../others/SuccessModal";
 import ErrorModal from "../others/ErrorModal";
 import Text from "../../Text";
 import { Cancel, Upload, Delete } from "@mui/icons-material";
+import SelectInput from "../../Select";
 
 const style = {
   position: "absolute",
@@ -78,10 +79,10 @@ export default function AddPortfolioModal({
   const [successModal, setSuccessModal] = useState(false);
   const [errorModal, setErrorModal] = useState(false);
   const [message, setMessage] = useState("");
+  const [services, setServices] = useState([]);
 
   const validation = Yup.object({
     name: Yup.string().required("Required"),
-    date: Yup.date().required("Required"),
     description: Yup.string().required("Required"),
   });
   const [files, setFiles] = useState([]);
@@ -99,12 +100,29 @@ export default function AddPortfolioModal({
     setErrorModal(true);
   };
 
+  useEffect(() => {
+    axios
+      .get("/api/services", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        
+        setServices(
+          response.data.services.map((service) => ({
+            label: service.name,
+            value: service._id,
+          }))
+        );
+      });
+  }, []);
+
   const handleUpdate = async (values, actions) => {
     try {
       const formData = new FormData();
       formData.append("service", values.service);
       formData.append("name", values.name);
-      formData.append("date", values.date);
       formData.append("description", values.description);
       files.forEach((file) => {
         formData.append("images", file);
@@ -188,24 +206,24 @@ export default function AddPortfolioModal({
                 <Form>
                   <Stack spacing={10}>
                     <Grid2 container spacing={{ md: 5, xs: 5 }}>
+                      <SelectInput
+                        id="service"
+                        label="Portfolio"
+                        name="service"
+                        options={services}
+                      />
                       {[
                         {
-                          label: "Portfolio Name",
-                          placeholder: "Portfolio Name",
+                          label: " Name",
+                          placeholder: " Name",
                           required: true,
                           type: "text",
                           name: "name",
                         },
+
                         {
-                          label: "Portfolio Date",
-                          placeholder: "Portfolio Date",
-                          required: true,
-                          type: "date",
-                          name: "date",
-                        },
-                        {
-                          label: "Portfolio Description",
-                          placeholder: "Portfolio Description",
+                          label: " Description",
+                          placeholder: " Description",
                           required: true,
                           type: "text",
                           name: "description",

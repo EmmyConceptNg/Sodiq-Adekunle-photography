@@ -34,7 +34,7 @@ export default function Contact() {
         <Box width="100%" height="100vh" pt={2}>
           <Header />
           <Hero admin={admin} />
-          <Action admin={admin} />
+          {/* <Action admin={admin} /> */}
           <Footer />
         </Box>
       </Box>

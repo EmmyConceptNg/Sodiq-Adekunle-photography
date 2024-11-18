@@ -19,6 +19,27 @@ import axios, { getImageUrl } from "../../../../api/axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import Carousel from "react-multi-carousel";
+
+const responsive = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 2,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 2,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 1,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
 
 export default function Hero() {
   const controls = useAnimation();
@@ -32,7 +53,7 @@ export default function Hero() {
     });
   }
 
-  const [portfolio, setPortfolio] = useState({});
+  const [portfolios, setPortfolios] = useState([]);
   const [tableLoad, setTableLoad] = useState(true);
 
   const { id } = useParams();
@@ -45,101 +66,98 @@ export default function Hero() {
         },
       })
       .then((response) => {
-        setPortfolio(response.data.portfolio);
+        setPortfolios(response.data.portfolio);
         setTableLoad(false);
       });
   }, [id]);
 
   return (
     <>
-      <Header portfolio={portfolio} />
-      <Grid
-        container
-        spacing={5}
+      {/* <Header portfolios={portfolios} /> */}
+      <Box
         sx={{ mx: { md: "200px", xs: "15px" }, mt: 5 }}
         ref={ref}
       >
-        <Address portfolio={portfolio} />
-        <About portfolio={portfolio} />
-        <ProjectImages portfolio={portfolio} />
-      </Grid>
+        <Text color="#fff" fs="24px" fw="500" sx={{ textAlign:'center', mb:3 }}>{portfolios[0]?.service?.name}</Text>
+        <ProjectImages portfolios={portfolios} />
+      </Box>
     </>
   );
 }
 
-function Address({ portfolio }) {
-  const controls = useAnimation();
-  const [ref, inView] = useInView();
+// function Address({ portfolios }) {
+//   const controls = useAnimation();
+//   const [ref, inView] = useInView();
 
-  if (inView) {
-    controls.start({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 1.5 },
-    });
-  }
+//   if (inView) {
+//     controls.start({
+//       opacity: 1,
+//       y: 0,
+//       transition: { duration: 1.5 },
+//     });
+//   }
 
-  return (
-    <Grid
-      size={{ xs: 12, md: 4 }}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        bgcolor: "#121214",
-        p: { md: "40px", xs: "20px" },
-        border: "1px solid rgba(0,0,0,.05)",
-        borderRadius: "20px",
-        boxShadow:
-          "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
-        textAlign: "center",
-      }}
-      component={motion.div}
-      initial={{ opacity: 0, y: 50 }}
-      animate={controls}
-      ref={ref}
-    >
-      <Stack alignItems="flex-start" spacing={2} mb={3}>
-        <Box>
-          <Text
-            sx={{ textAlign: "left", my: 0 }}
-            fs="14px"
-            fw="500"
-            color="gray"
-          >
-            Name
-          </Text>
-          <Text
-            sx={{ textAlign: "left", my: 0 }}
-            fs="18px"
-            fw="600"
-            color="#fff"
-          >
-            {portfolio?.name}
-          </Text>
-        </Box>
-        <Box>
-          <Text
-            sx={{ textAlign: "left", my: 0 }}
-            fs="14px"
-            fw="500"
-            color="gray"
-          >
-            Date
-          </Text>
-          <Text
-            sx={{ textAlign: "left", my: 0 }}
-            fs="18px"
-            fw="600"
-            color="#fff"
-          >
-            {moment(portfolio?.date).format("MMMM Do YYYY")}
-          </Text>
-        </Box>
-      </Stack>
-    </Grid>
-  );
-}
+//   return (
+//     <Grid
+//       size={{ xs: 12, md: 4 }}
+//       sx={{
+//         display: "flex",
+//         flexDirection: "column",
+//         justifyContent: "center",
+//         bgcolor: "#121214",
+//         p: { md: "40px", xs: "20px" },
+//         border: "1px solid rgba(0,0,0,.05)",
+//         borderRadius: "20px",
+//         boxShadow:
+//           "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
+//         textAlign: "center",
+//       }}
+//       component={motion.div}
+//       initial={{ opacity: 0, y: 50 }}
+//       animate={controls}
+//       ref={ref}
+//     >
+//       <Stack alignItems="flex-start" spacing={2} mb={3}>
+//         <Box>
+//           <Text
+//             sx={{ textAlign: "left", my: 0 }}
+//             fs="14px"
+//             fw="500"
+//             color="gray"
+//           >
+//             Name
+//           </Text>
+//           <Text
+//             sx={{ textAlign: "left", my: 0 }}
+//             fs="18px"
+//             fw="600"
+//             color="#fff"
+//           >
+//             {portfolio?.name}
+//           </Text>
+//         </Box>
+//         <Box>
+//           <Text
+//             sx={{ textAlign: "left", my: 0 }}
+//             fs="14px"
+//             fw="500"
+//             color="gray"
+//           >
+//             Date
+//           </Text>
+//           <Text
+//             sx={{ textAlign: "left", my: 0 }}
+//             fs="18px"
+//             fw="600"
+//             color="#fff"
+//           >
+//             {moment(portfolio?.date).format("MMMM Do YYYY")}
+//           </Text>
+//         </Box>
+//       </Stack>
+//     </Grid>
+//   );
+// }
 
 function About({ portfolio }) {
   const navigate = useNavigate();
@@ -155,70 +173,64 @@ function About({ portfolio }) {
   }
 
   return (
-    <Grid
-      size={{ xs: 12, md: 8 }}
-      component={motion.div}
-      initial={{ opacity: 0, y: 50 }}
-      animate={controls}
-      ref={ref}
-    >
+    
       <Stack spacing={5}>
-        <Box
+        <Box width="100%"
           bgcolor="#121214"
           sx={{
-            p: { md: "40px", xs: "20px" },
+            p: { md: "20px", xs: "20px" },
             border: "1px solid rgba(0,0,0,.05)",
             borderRadius: "20px",
             boxShadow:
               "#ffffff06 0 .362176px .651917px -1px inset,#ffffff09 0 3px 5.4px -2px inset",
           }}
         >
-          <Text
+          <Text sx={{ textAlign : 'center' }}
             fs={{ md: "24px", xs: "18px" }}
             fw="900"
             ff="Helvetica Neue"
             color="#fff"
           >
-            Portfolio Description
+            {portfolio?.name}
           </Text>
-          <Text
+          <Text sx={{ textAlign : 'center' }}
             fs={{ md: "14px", xs: "14px" }}
             fw="500"
             color="gray"
-            sx={{ mb: 3 }}
+           
           >
             {portfolio?.description}
           </Text>
         </Box>
       </Stack>
-    </Grid>
+    
   );
 }
 
-function Header({ portfolio }) {
-  const [randomImage, setRandomImage] = useState("");
-  useEffect(() => {
-    if (portfolio?.images?.length > 0) {
-      setRandomImage(
-        portfolio?.images[Math.floor(Math.random() * portfolio?.images?.length)]
-      );
-    }
-  }, [portfolio?.images]);
+// function Header({ portfolios }) {
+//   const [randomImage, setRandomImage] = useState("");
+//   useEffect(() => {
+//     if (portfolio?.images?.length > 0) {
+//       setRandomImage(
+//         portfolio?.images[Math.floor(Math.random() * portfolio?.images?.length)]
+//       );
+//     }
+//   }, [portfolio?.images]);
 
-  return (
-    <>
-      <ServiceHeader portfolio={portfolio} />
-      <CardMedia
-        component="img"
-        height="100%"
-        image={getImageUrl(randomImage)}
-        alt={portfolio?.name}
-      />
-    </>
-  );
-}
+//   return (
+//     <>
+//       <ServiceHeader portfolio={portfolio} />
+//       <CardMedia
+//         component="img"
+//         height="100%"
+//         image={getImageUrl(randomImage)}
+//         alt={portfolio?.name}
+//       />
+//     </>
+//   );
+// }
 
-function ProjectImages({ portfolio }) {
+function ProjectImages({ portfolios }) {
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
 
@@ -234,30 +246,45 @@ function ProjectImages({ portfolio }) {
 
   return (
     <>
-      <Grid container spacing={2}>
-        {portfolio?.images?.map((item, index) => (
-          <Grid size={{ xs: 12, md: 6, sm: 6 }} key={index}>
-            <CardMedia
-              component="img"
-              height="500"
-              image={getImageUrl(item)}
-              alt="wedding"
-              onClick={() => handleClickOpen(getImageUrl(item))}
-              sx={{ cursor: "pointer" }}
-            />
-          </Grid>
+      <Stack spacing={4}>
+        {portfolios.map((portfolio) => (
+          <>
+            <About portfolio={portfolio} />
+            <Carousel
+              responsive={responsive}
+              arrows={false}
+              infinite={true}
+              autoPlay={true}
+              autoPlaySpeed={2000}
+            >
+              
+                {portfolio?.images?.map((item) => (
+              
+                    <CardMedia key={item}
+                      component="img"
+                      height="500"
+                      image={getImageUrl(item)}
+                      alt="wedding"
+                      onClick={() => handleClickOpen(getImageUrl(item))}
+                      sx={{ cursor: "pointer", mx:6 }}
+                    />
+              
+                ))}
+              
+            </Carousel>
+            <Dialog open={open} onClose={handleClose} maxWidth="lg">
+              <DialogTitle>Image Preview</DialogTitle>
+              <DialogContent>
+                <img
+                  src={selectedImage}
+                  alt="Selected"
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </DialogContent>
+            </Dialog>
+          </>
         ))}
-      </Grid>
-      <Dialog open={open} onClose={handleClose} maxWidth="lg">
-        <DialogTitle>Image Preview</DialogTitle>
-        <DialogContent>
-          <img
-            src={selectedImage}
-            alt="Selected"
-            style={{ width: "100%", height: "auto" }}
-          />
-        </DialogContent>
-      </Dialog>
+      </Stack>
     </>
   );
 }

@@ -2,6 +2,7 @@ import { errorHandling } from "../middleware/errorHandler.js";
 import Portfolio from "../models/Portfolio.js";
 import path from "path";
 import fs from "fs";
+import Service from "../models/Service.js";
 const __dirname = path.resolve();
 
 const checkDuplicateName = async (name) => {
@@ -35,6 +36,10 @@ export const addPortfolio = async (req, res, next) => {
       images: imagePaths,
     });
 
+    const myService = await Service.findById(service)
+    myService.portfolio.push(portfolio._id);
+    await myService.save()
+
     res
       .status(201)
       .json({ message: "Portfolio Added Successfully", portfolio });
@@ -53,11 +58,11 @@ export const getPortfolios = (req, res, next) => {
 };
 
 export const getPortfolio = (req, res, next) => {
-  Portfolio.findById(req.params.portfolioId)
+  Portfolio.find({service:req.params.serviceId}).populate(['service'])
     .then((portfolio) =>
       res
         .status(200)
-        .json({ portfolio, message: `Fetched portfolio ${portfolio.name}` })
+        .json({ portfolio, message: `Fetched portfolio` })
     )
     .catch((error) => next(new Error(error.stack)));
 };

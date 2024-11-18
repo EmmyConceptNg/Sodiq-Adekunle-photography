@@ -6,6 +6,12 @@ export const MenuItems = [
     link: "/admin/dashboard",
   },
   {
+    id: "services",
+    name: "Services",
+    icon: "bytesize:portfolio",
+    link: "/admin/services",
+  },
+  {
     id: "portfolio",
     name: "Portfolio",
     icon: "bytesize:portfolio",
