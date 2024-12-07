@@ -35,7 +35,7 @@ export default function Home() {
           <Header />
           <Hero />
           {/* <Projects /> */}
-          <Action />
+          {/* <Action /> */}
           <Footer />
         </Box>
       </Box>
