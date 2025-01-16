@@ -29,6 +29,7 @@ export default function NavBar() {
     { to: "/portfolio", name: "Portfolio" },
     { to: "/contact", name: "Contact" },
     { to: "/about", name: "About" },
+    { to: "/policy", name: "Policy" },
   ];
 
 
