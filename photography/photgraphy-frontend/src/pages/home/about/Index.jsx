@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
 import axios from "../../../api/axios";
 import Experience from "./Experience";
-import Testimonial from "./Testimonial";
+// import Testimonial from "./Testimonial";
 import Action from "../../../components/Action";
 
 export default function About() {
@@ -62,7 +62,7 @@ export default function About() {
           ) : (
             <Hero admin={admin} />
           )}
-          <Testimonial />
+          {/* <Testimonial /> */}
           <Experience admin={admin} />
           <Action />
           <Footer />
