@@ -301,7 +301,7 @@ export default function EditServiceModal({
                                 src={
                                   file instanceof File
                                     ? URL.createObjectURL(file)
-                                    : getImageUrl(file.path)
+                                    : file.path
                                 }
                                 alt={`Uploaded ${index}`}
                                 style={{ width: "100%", height: "auto" }}

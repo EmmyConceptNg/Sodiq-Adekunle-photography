@@ -33,8 +33,6 @@ function handleMulterErrors(err, req, res, next) {
 router.post(
   "/",
   verifyToken,
-  upload.array("images", 20),
-  handleMulterErrors, // Add error handling middleware
   addPortfolio
 );
 

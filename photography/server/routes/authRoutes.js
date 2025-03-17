@@ -19,7 +19,6 @@ router.put('/update/:userId', verifyToken, updateUser)
 router.put(
   "/update-display-image/:userId",
   verifyToken,
-  upload.single("image"),
   updateDisplayImage
 );
 router.post("/refresh-token", refreshToken);

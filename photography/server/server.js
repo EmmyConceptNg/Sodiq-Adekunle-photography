@@ -19,9 +19,11 @@ import { errorProcessing, logErrorToFile } from "./middleware/errorHandler.js";
 import YAML from "yamljs";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import fileUpload from "express-fileupload"; // Import express-fileupload
 
 // CONFIGURATION
 const app = express();
+
 
 app.use(
   cors({
@@ -39,6 +41,7 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.use(fileUpload()); // Enable file upload
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

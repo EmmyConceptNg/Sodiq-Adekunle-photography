@@ -169,7 +169,7 @@ function ImageSection() {
         textAlign: "center",
       }}
     >
-      <Image src={user?.image ? getImageUrl(user?.image) : "/icons/profile.png"} alt={user?.firstName} sx={{ borderRadius : '100%' }} />
+      <Image src={user?.image ? user?.image : "/icons/profile.png"} alt={user?.firstName} sx={{ borderRadius : '100%' }} />
       <Box>
         <input
           type="file"

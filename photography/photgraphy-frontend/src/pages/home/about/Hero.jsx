@@ -73,7 +73,7 @@ function PersonalInfo({admin}) {
       ref={ref}
     >
       <Image
-        src={admin?.image ? getImageUrl(admin?.image) : "/icons/profile.png"}
+        src={admin?.image ? admin?.image : "/icons/profile.png"}
         alt={admin?.firstName}
         sx={{ borderRadius: "20px", height: "100%" }}
       />

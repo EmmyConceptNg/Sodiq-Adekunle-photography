@@ -190,7 +190,7 @@ function ProjectTab() {
                       <CardMedia
                         component="img"
                         height="200"
-                        image={getImageUrl(item)}
+                        image={item}
                         alt={portfolio?.name}
                         sx={{
                           transition: "0.3s",

@@ -4,6 +4,34 @@ import path from "path";
 import fs from "fs";
 import Service from "../models/Service.js";
 const __dirname = path.resolve();
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+
+// Configure Cloudflare R2 using AWS SDK
+const r2Client = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY_ID,
+    secretAccessKey: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
+  },
+});
+
+
+// Helper function to upload file to Cloudflare R2
+const uploadToR2 = async (file) => {
+  const key = `${Date.now()}-${file.name}`;
+
+  const uploadParams = {
+    Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
+    Key: key,
+    Body: file.data,
+    ContentType: file.mimetype,
+  };
+
+  await r2Client.send(new PutObjectCommand(uploadParams));
+
+  return `${process.env.CLOUDFLARE_PUBLIC_URL}/${key}`;
+};
 
 const checkDuplicateName = async (name) => {
   return false;
@@ -25,8 +53,11 @@ export const addPortfolio = async (req, res, next) => {
     }
 
     // Collect image file paths
-    console.log("Uploaded files: ", req.files);
-    const imagePaths = req.files.map((file) => file.path);
+    
+    const files = Array.isArray(req.files.images)
+      ? req.files.images
+      : [req.files.images];
+    const imagePaths = await Promise.all(files.map((file) => uploadToR2(file)));
 
     const portfolio = await Portfolio.create({
       name,
@@ -69,10 +100,9 @@ export const getPortfolio = (req, res, next) => {
 
 export const updatePortfolio = async (req, res, next) => {
   try {
-    const { name, date, description, service, removedImages } =
-      req.body;
+    const { name, date, description, service, removedImages } = req.body;
 
-      console.log(req.body);
+    console.log(req.body);
 
     // Case-insensitive check for duplicate portfolio name
     const duplicatePortfolio = await Portfolio.findOne({
@@ -88,8 +118,6 @@ export const updatePortfolio = async (req, res, next) => {
 
     // Find the existing portfolio
     let portfolio = await Portfolio.findById(req.params.portfolioId);
-
-    
 
     if (!portfolio) {
       return res.status(404).json({ message: "Portfolio not found." });
@@ -110,7 +138,10 @@ export const updatePortfolio = async (req, res, next) => {
     );
 
     // Collect image file paths for new images
-    const newImagePaths = req.files.map((file) => file.path);
+    const files = Array.isArray(req.files.images)
+      ? req.files.images
+      : [req.files.images];
+    const newImagePaths = await Promise.all(files.map((file) => uploadToR2(file)));
 
     // Update the portfolio with new data
     portfolio.name = name;
@@ -125,7 +156,7 @@ export const updatePortfolio = async (req, res, next) => {
       .status(200)
       .json({ portfolio, message: "Portfolio Updated Successfully" });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     next(new Error(error.stack));
   }
 };

@@ -223,7 +223,7 @@ function About({ portfolio }) {
 //       <CardMedia
 //         component="img"
 //         height="100%"
-//         image={getImageUrl(randomImage)}
+//         image={randomImage}
 //         alt={portfolio?.name}
 //       />
 //     </>
@@ -263,9 +263,9 @@ function ProjectImages({ portfolios }) {
                     <CardMedia key={item}
                       component="img"
                       height="500"
-                      image={getImageUrl(item)}
+                      image={item}
                       alt="wedding"
-                      onClick={() => handleClickOpen(getImageUrl(item))}
+                      onClick={() => handleClickOpen(item)}
                       sx={{ cursor: "pointer", mx:6 }}
                     />
               

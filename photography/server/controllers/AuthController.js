@@ -2,6 +2,33 @@ import jwt from "jsonwebtoken";
 import { errorHandling } from "../middleware/errorHandler.js";
 import { Hash, VerifyHash } from "../middleware/hasher.js";
 import User from "../models/User.js";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+
+// Configure Cloudflare R2 using AWS SDK
+const r2Client = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY_ID,
+    secretAccessKey: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
+  },
+});
+
+// Helper function to upload file to Cloudflare R2
+const uploadToR2 = async (file) => {
+  const key = `${Date.now()}-${file.name}`;
+
+  const uploadParams = {
+    Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
+    Key: key,
+    Body: file.data,
+    ContentType: file.mimetype,
+  };
+
+  await r2Client.send(new PutObjectCommand(uploadParams));
+
+  return `${process.env.CLOUDFLARE_PUBLIC_URL}/${key}`;
+};
 
 const checkDuplicateUser = async (fields, type) => {
   const handleBadRequestException = (e) => {
@@ -168,7 +195,9 @@ export const updateDisplayImage = async (req, res, next) => {
     }
 
     // Update the user's profile image with the uploaded file's path
-    user.image = req.file.path;
+    const file = req.file;
+    const imagePath = await uploadToR2(file); // Await the uploadToR2 function
+    user.image = imagePath;
 
     await user.save();
 
